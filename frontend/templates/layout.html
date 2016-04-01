@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <link rel="stylesheet" href='/static/style.css'>
+    </head>
+
+    <body>
+        <div id="banner">
+            <h1 id="banner_title"><a id="np" href="/">Now Playing:</a> {{ playing|e }}<h1>
+        </div>
+
+        <form action="/submit" method=post>
+            <div>
+                <div><label id="text_label" for="link">Paste a YouTube Link:</label><div>
+                <input type="text" id="link" name="link">
+            </div>
+
+            <div class="button">
+                <button class="btn" type="submit">Submit Link</button>
+            </div>
+        </form>
+
+        <div id="submission">
+            {% block submit %}{% endblock %}
+        </div>
+
+        <div id="queue_container">
+            <h1><a href="/">Items in the queue ({{ q_count }}):</a></h1>
+            <ol id="queue_list">
+            {% for item in queue %}
+                <li class="queue">{{ item[0]|e }}</li>
+            {% endfor %}
+            </ol>
+        </div>
+    </body>
+</html>

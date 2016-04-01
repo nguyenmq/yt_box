@@ -1,0 +1,114 @@
+body {
+    background: #002B36;
+    color: #93A1A1;
+    font-family: sans-serif;
+    text-align: center;
+    margin: 0px;
+}
+
+.button {
+    padding-top: 1em;
+    margin-top: 3em;
+    width: 100%;
+    text-align: center;
+}
+
+.notify {
+    font-size: 32pt;
+}
+
+.btn {
+    background: #3498db;
+    background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+    background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+    background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+    background-image: -o-linear-gradient(top, #3498db, #2980b9);
+    background-image: linear-gradient(to bottom, #3498db, #2980b9);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    font-family: Arial;
+    color: #FDF6E3;
+    font-size: 30px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    height: 80px;
+    width: 300px;
+}
+
+.btn:hover {
+    background: #3cb0fd;
+    background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}
+
+input {
+    width: 720px;
+    font-size: 34pt;
+    margin-top: 1em;
+    background: #93A1A1;
+    color: #FDF6E3;
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    padding: 10px 20px 10px 20px;
+}
+
+#text_label {
+    font-size: 30pt;
+    font-weight: bold;
+}
+
+#container {
+    text-align: center;
+    width: 720px;
+    float: left;
+    background: black;
+    height: 100%;
+}
+
+h1 {
+    font-size: 24pt;
+}
+
+.queue {
+    text-align: left;
+    font-size: 24pt;
+}
+
+#queue_container {
+    padding: 1em;
+    text-align: left;
+    width: 720px;
+    margin:0 auto;
+}
+
+#np {
+    color: #FDF6E3;
+}
+
+#banner_title {
+    font-size: 32pt;
+    padding: 20px;
+    margin: 0px;
+    color: #FDF6E3;
+}
+
+#banner {
+    width: 100%;
+    background: #268BD2;
+    margin-bottom: 3em;
+    color: #FDF6E3;
+}
+
+#submission {
+    margin-top: 1em;
+}
+
+a {
+    color: #6C71C4;
+}
