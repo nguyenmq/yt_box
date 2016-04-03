@@ -1,4 +1,4 @@
 {
-"cmd" : "CMD_SUB_VIDEO",
+"cmd" : "CMD_REQ_ADD_VIDEO",
 "link" : "https://www.youtube.com/watch?v=sBzrzS1Ag_g"
 }

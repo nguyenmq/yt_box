@@ -36,7 +36,9 @@ while inputs:
         else:
             data = sock.recv(1024)
             if data:
-                ytp.parse_msg(data.decode('utf-8'))
+                response = ytp.parse_msg(data.decode('utf-8'))
+                if response is not None:
+                    sock.sendall(response)
             else:
                 sock.close()
                 inputs.remove(sock)

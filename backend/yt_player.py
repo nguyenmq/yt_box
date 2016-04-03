@@ -23,14 +23,15 @@ class yt_player:
         self._jobcv = threading.Condition()
 
         # Now playing title
-        self._now_playing = "None"
+        self._now_playing = ("None","00")
 
         # Log video submissions
         # self._log = open(file="submissions.txt", mode="a", buffering=1)
 
         # callback table to handle rpc
         self._callbacks = {
-            yt_rpc.CMD_SUB_VIDEO : self._enqueue
+            yt_rpc.CMD_REQ_ADD_VIDEO : self._enqueue,
+            yt_rpc.CMD_REQ_NOW_PLY : self._get_now_playing
         }
 
         # spawn some threads
@@ -81,6 +82,11 @@ class yt_player:
 
         return None
 
+    def _get_now_playing(self, parsed_json):
+        video = { "name" : self._now_playing[0], "id" : self._now_playing[1] }
+        msg = {"cmd" : yt_rpc.CMD_RSP_NOW_PLY, "video" : video }
+        return json.JSONEncoder().encode(msg).encode('utf-8')
+
     def get_next_video(self):
         """
         Pops the next item in the queue off and returns it. Or none if the
@@ -95,9 +101,9 @@ class yt_player:
         self._qlock.release()
 
         if video is None:
-            self._now_playing = "None"
+            self._now_playing = ("None", 00)
         else:
-            self._now_playing = video[0]
+            self._now_playing = video
 
         return video
 
@@ -109,7 +115,7 @@ class yt_player:
         :param msg: Received message
         :type msg: string
         """
-        response = None
+        response = "".encode('utf-8')
 
         try:
             parsed_json = json.loads(msg)
@@ -120,8 +126,9 @@ class yt_player:
                     print('No callback for "{}"'.format(parsed_json['cmd']))
             else:
                 print('No command found in json message: {}'.format(parsed_json.dumps()))
-        except:
-            print( "Invalid json string given: {}".format(msg))
+        except json.JSONDecodeError as e:
+            print(e)
+            print( "json: {}".format(msg))
 
         return response
 
