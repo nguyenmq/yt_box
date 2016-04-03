@@ -1,12 +1,13 @@
 import os
 import select
 import socket
+import subprocess
 import sys
 
-import yt_player
+from yt_player import yt_player
 
 hostname = "/tmp/yt_player"
-ytp = yt_player.yt_player()
+ytp = yt_player()
 
 try:
     os.unlink( hostname )
@@ -20,9 +21,11 @@ listen.listen(10)
 
 inputs = [listen]
 outputs = []
+child = None
+playing = False
 
 while inputs:
-    readable, writable, errors = select.select(inputs, outputs, inputs)
+    readable, writable, errors = select.select(inputs, outputs, inputs, 1)
 
     for sock in readable:
         if sock is listen:
@@ -38,4 +41,18 @@ while inputs:
                 sock.close()
                 inputs.remove(sock)
                 print( "Removed socket" )
+
+    if child:
+        return_code = child.poll()
+        if return_code is not None:
+            playing = False
+
+    if not playing:
+        next_video = ytp.get_next_video()
+        if next_video:
+            link = "https://www.youtube.com/watch?v={}".format(next_video[1])
+            args = ['/usr/bin/mpv', '--fs', link]
+            child = subprocess.Popen(args)
+            playing = True
+
 
