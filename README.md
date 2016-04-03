@@ -12,6 +12,7 @@ to queue them on the server.
 + Flask
 + nginx
 + uWSGI
++ youtube_dl
 
 ### Installation
 
@@ -23,24 +24,24 @@ This serves as the environment for developing `yt_box`
 sudo pip install virtualenv
 ```
 
-+ Go to the `frontend` directory:
++ Go to the repo's directory:
 ```
-cd <repo location>/yt_box/frontend
+cd <repo location>/yt_box/
 ```
 
 + Make a Python virtual environment within the repo:
 ```
-virtualenv appenv
+virtualenv yt_box_env
 ```
 
 + Activate the virtual environment:
 ```
-source appenv/bin/activate
+source yt_box_env/bin/activate
 ```
 
-+ Install Flask and uWSGI:
++ Install Flask, uWSGI, and youtube_dl:
 ```
-pip install flask uwsgi
+pip install flask uwsgi youtube_dl
 ```
 
 #### Configure uWSGI
@@ -61,12 +62,18 @@ python app.py
 uwsgi --socket 0.0.0.0:8000 --protocol=http -w wsgi
 ```
 
-+ Using nginx:
++ Starting the web services manually:
 ```
 systemctl start nginx
 uwsgi --ini app.ini
 ```
-    + Someday launching uWSGI should go inside a systemd service file
+
++ Enabling the web services to start at boot:
+```
+# Because this is being developed on Arch, which uses systemd:
+systemctl enable nginx
+uwsgi --ini app.ini # There still needs to be a service file written for this part
+```
 
 ### Design
 `yt_box` is split into a frontend Flask application and a backend application

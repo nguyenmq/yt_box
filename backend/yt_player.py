@@ -1,27 +1,53 @@
+import json
+import os
 import select
 import socket
+import subprocess
+import sys
 
-hostname = "localhost"
-port= 9000
+from collections import deque
 
-listen = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-listen.bind( (hostname, port) )
-listen.listen(10)
+sys.path.append('../lib')
+from yt_rpc import yt_rpc
 
-inputs = [listen]
-outputs = []
+class yt_player:
+    """
+    Manages the video queue
+    """
 
-while inputs:
-    readable, writable, errors = select.select(inputs, outputs, inputs)
+    def __init__(self):
+        self._q = deque([])
+        self._now_playing = "None"
+        #self._log = open(file="submissions.txt", mode="a", buffering=1)
+        self._callbacks = {
+            yt_rpc.CMD_SUB_VIDEO : self._enqueue
+        }
 
-    for sock in readable:
-        if sock is listen:
-            connection, client_address = sock.accept()
-            connection.setblocking(0)
-            inputs.append(connection)
-        else:
-            data = sock.recv(1024)
-            if data:
-                print(data)
+    def _enqueue(self, parsed_json):
+        link = parsed_json['link']
+        complete = subprocess.run( ["youtube-dl", "-e", "--get-id", link], stdout=subprocess.PIPE, universal_newlines=True )
+        if complete.returncode == 0:
+            tokens = complete.stdout.split('\n')
+            self._q.append(tokens)
+
+        #for item in self._q:
+        #    print( "{} = {}".format(item[0], item[1]))
+
+    def parse_msg(self, msg):
+        """
+        Parses incoming RPC messages
+
+        :param msg: Received message
+        :type msg: string
+        """
+        response = None
+        parsed_json = json.loads(msg)
+        if 'cmd' in parsed_json:
+            if parsed_json['cmd'] in self._callbacks:
+                response = self._callbacks[parsed_json['cmd']](parsed_json)
             else:
-                inputs.remove(sock)
+                print('No callback for "{}"'.format(parsed_json['cmd']))
+        else:
+            print('No command found in json message: {}'.format(parsed_json.dumps()))
+
+        return response
