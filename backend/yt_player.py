@@ -31,7 +31,8 @@ class yt_player:
         # callback table to handle rpc
         self._callbacks = {
             yt_rpc.CMD_REQ_ADD_VIDEO : self._enqueue,
-            yt_rpc.CMD_REQ_NOW_PLY : self._get_now_playing
+            yt_rpc.CMD_REQ_NOW_PLY : self._get_now_playing,
+            yt_rpc.CMD_REQ_QUEUE : self._get_queue
         }
 
         # spawn some threads
@@ -83,8 +84,28 @@ class yt_player:
         return None
 
     def _get_now_playing(self, parsed_json):
+        """
+        Get the name and id of the video currently playing.
+
+        :param parsed_json: Received json message
+        :type parsed_json: parsed json object
+        """
         video = { "name" : self._now_playing[0], "id" : self._now_playing[1] }
         msg = {"cmd" : yt_rpc.CMD_RSP_NOW_PLY, "video" : video }
+        return json.JSONEncoder().encode(msg).encode('utf-8')
+
+    def _get_queue(self, parsed_json):
+        """
+        Get the items in the queue
+
+        :param parsed_json: Received json message
+        :type parsed_json: parsed json object
+        """
+        q = []
+        for vid in self._q:
+            q.append({"name" : vid[0], "id" : vid[1]})
+
+        msg = {"cmd" : yt_rpc.CMD_RSP_QUEUE, "videos" : q }
         return json.JSONEncoder().encode(msg).encode('utf-8')
 
     def get_next_video(self):

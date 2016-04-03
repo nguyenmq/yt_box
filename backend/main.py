@@ -6,6 +6,46 @@ import sys
 
 from yt_player import yt_player
 
+def extract_msgs(sock, messages):
+    """
+    Multiple messages can be received after a recv call on a socket. This
+    attempts to extract the individual json messages.
+
+    :param sock: The socket we're currently talking to
+    :type sock: socket object
+
+    :param messages: The RPC messages received from the remote client
+    :type messages: string
+    """
+    # some state variables
+    bracket_cnt = 0
+    start = 0
+    end = 0
+
+    # Loop through the string. Increment the count when we
+    # see an open bracket and decrement on a closing
+    # bracket. When the count hits zero, we found the
+    # closing bracket of a message
+    for i, c in enumerate(messages):
+        end = i
+        if c is '{':
+            bracket_cnt = bracket_cnt + 1
+        elif c is '}':
+            bracket_cnt = bracket_cnt - 1
+
+        if bracket_cnt is 0:
+            response = ytp.parse_msg(messages[start:end+1])
+            if response is not None:
+                sock.sendall(response)
+
+            start = end + 1
+
+    # TODO: deal with partial messages
+    # if bracket_cnt is not 0:
+
+#-----------------------------------------------------------
+# Start of application
+#-----------------------------------------------------------
 hostname = "/tmp/yt_player"
 ytp = yt_player()
 
@@ -36,9 +76,7 @@ while inputs:
         else:
             data = sock.recv(1024)
             if data:
-                response = ytp.parse_msg(data.decode('utf-8'))
-                if response is not None:
-                    sock.sendall(response)
+                extract_msgs(sock, data.decode('utf-8'))
             else:
                 sock.close()
                 inputs.remove(sock)
@@ -56,5 +94,4 @@ while inputs:
             args = ['/usr/bin/mpv', '--fs', link]
             child = subprocess.Popen(args)
             playing = True
-
 

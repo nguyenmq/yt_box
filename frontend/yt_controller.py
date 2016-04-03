@@ -28,11 +28,30 @@ class yt_controller:
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         self._con.sendall(json_msg)
 
+        now_playing = ("None", "00")
         data = self._con.recv(1024)
         if data:
             try:
                 parsed_json = json.loads(data.decode('utf-8'))
-                return (parsed_json['video']['name'], parsed_json['video']['id'])
+                now_playing = (parsed_json['video']['name'], parsed_json['video']['id'])
             except:
                 print("Did not get a valid response")
 
+        return now_playing
+
+    def get_queue(self):
+        msg = {"cmd" : yt_rpc.CMD_REQ_QUEUE}
+        json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
+        self._con.sendall(json_msg)
+
+        q = []
+        data = self._con.recv(2048)
+        if data:
+            try:
+                parsed_json = json.loads(data.decode('utf-8'))
+                for vid in parsed_json['videos']:
+                    q.append((vid['name'], vid['id']))
+            except:
+                print("Did not get a valid response")
+
+        return q
