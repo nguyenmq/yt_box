@@ -34,9 +34,9 @@ def extract_msgs(sock, messages):
             bracket_cnt = bracket_cnt - 1
 
         if bracket_cnt is 0:
-            response = ytp.parse_msg(messages[start:end+1])
-            if response is not None:
-                sock.sendall(response)
+            response = ytp.parse_msg(sock, messages[start:end+1])
+            #if response is not None:
+            #    sock.sendall(response)
 
             start = end + 1
 

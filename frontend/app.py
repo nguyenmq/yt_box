@@ -17,10 +17,10 @@ def index():
 @application.route('/submit', methods=['POST', 'GET'])
 def submit():
     if request.method == 'POST':
-        ytc.add_song(request.form['link'])
+        name = ytc.add_song(request.form['link'])
         now_playing = ytc.get_now_playing()
         queue = ytc.get_queue()
-        return render_template('submit.html', playing=now_playing[0], q_count=len(queue), queue=queue)
+        return render_template('submit.html', playing=now_playing[0], q_count=len(queue), queue=queue, link=name)
     elif request.method == 'GET':
         now_playing = ytc.get_now_playing()
         queue = ytc.get_queue()

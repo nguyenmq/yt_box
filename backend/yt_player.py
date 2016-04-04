@@ -30,9 +30,9 @@ class yt_player:
 
         # callback table to handle rpc
         self._callbacks = {
-            yt_rpc.CMD_REQ_ADD_VIDEO : self._enqueue,
-            yt_rpc.CMD_REQ_NOW_PLY : self._get_now_playing,
-            yt_rpc.CMD_REQ_QUEUE : self._get_queue
+            yt_rpc.CMD_REQ_ADD_VIDEO : self._hndlr_enqueue,
+            yt_rpc.CMD_REQ_NOW_PLY : self._hndlr_get_now_playing,
+            yt_rpc.CMD_REQ_QUEUE : self._hndlr_get_queue
         }
 
         # spawn some threads
@@ -56,7 +56,7 @@ class yt_player:
             link = self._jobq.popleft()
             self._jobcv.release()
 
-            complete = subprocess.run( ["youtube-dl", "-e", "--get-id", link], stdout=subprocess.PIPE, universal_newlines=True )
+            complete = subprocess.run( ["youtube-dl", "-e", "--get-id", link[1]], stdout=subprocess.PIPE, universal_newlines=True )
             if complete.returncode == 0:
                 tokens = complete.stdout.split('\n')
                 self._qlock.acquire()
@@ -65,8 +65,10 @@ class yt_player:
                 #for item in self._q:
                 #    print("{} = {}".format(item[0], item[1]))
                 self._qlock.release()
+                msg = {"cmd" : yt_rpc.CMD_RSP_ADD_VIDEO, "name" : tokens[0] }
+                link[0].sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 
-    def _enqueue(self, parsed_json):
+    def _hndlr_enqueue(self, sock, parsed_json):
         """
         Add a video. This will first add the link to the thread job queue where
         a thread will do the work of requesting video metatadata and then adding
@@ -75,15 +77,13 @@ class yt_player:
         :param parsed_json: Received json message
         :type parsed_json: parsed json object
         """
-        link = parsed_json['link']
+        link = (sock, parsed_json['link'])
         self._jobcv.acquire()
         self._jobq.append(link)
         self._jobcv.notify()
         self._jobcv.release()
 
-        return None
-
-    def _get_now_playing(self, parsed_json):
+    def _hndlr_get_now_playing(self, sock, parsed_json):
         """
         Get the name and id of the video currently playing.
 
@@ -92,9 +92,9 @@ class yt_player:
         """
         video = { "name" : self._now_playing[0], "id" : self._now_playing[1] }
         msg = {"cmd" : yt_rpc.CMD_RSP_NOW_PLY, "video" : video }
-        return json.JSONEncoder().encode(msg).encode('utf-8')
+        sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 
-    def _get_queue(self, parsed_json):
+    def _hndlr_get_queue(self, sock, parsed_json):
         """
         Get the items in the queue
 
@@ -106,7 +106,7 @@ class yt_player:
             q.append({"name" : vid[0], "id" : vid[1]})
 
         msg = {"cmd" : yt_rpc.CMD_RSP_QUEUE, "videos" : q }
-        return json.JSONEncoder().encode(msg).encode('utf-8')
+        sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 
     def get_next_video(self):
         """
@@ -128,7 +128,7 @@ class yt_player:
 
         return video
 
-    def parse_msg(self, msg):
+    def parse_msg(self, sock, msg):
         """
         Parses incoming RPC messages and passes the command to the relevant
         callback handler.
@@ -142,7 +142,7 @@ class yt_player:
             parsed_json = json.loads(msg)
             if 'cmd' in parsed_json:
                 if parsed_json['cmd'] in self._callbacks:
-                    response = self._callbacks[parsed_json['cmd']](parsed_json)
+                    self._callbacks[parsed_json['cmd']](sock, parsed_json)
                 else:
                     print('No callback for "{}"'.format(parsed_json['cmd']))
             else:

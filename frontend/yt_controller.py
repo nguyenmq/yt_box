@@ -23,6 +23,17 @@ class yt_controller:
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         self._con.sendall(json_msg)
 
+        name = ""
+        data = self._con.recv(1024)
+        if data:
+            try:
+                parsed_json = json.loads(data.decode('utf-8'))
+                name = (parsed_json['name'])
+            except:
+                print("Did not get a valid response")
+
+        return name
+
     def get_now_playing(self):
         msg = {"cmd" : yt_rpc.CMD_REQ_NOW_PLY}
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
