@@ -22,5 +22,13 @@ def add():
 
     return "Error"
 
+@application.route('/queue', methods=['GET'])
+def queue():
+    if request.method == 'GET':
+        new_queue = ytc.get_queue()
+        return render_template('queue.html', queue=new_queue, q_count=len(new_queue))
+
+    return "Error"
+
 if __name__ == '__main__':
     application.run( debug=True, host="0.0.0.0" )

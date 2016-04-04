@@ -111,6 +111,11 @@ h1 {
     color: #FDF6E3;
 }
 
+#queue_title {
+    text-decoration: underline;
+    color: #6C71C4;
+}
+
 #new_vid {
     margin: 0px;
 }
