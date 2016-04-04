@@ -14,19 +14,13 @@ def index():
     queue = ytc.get_queue()
     return render_template('index.html', playing=now_playing[0], q_count=len(queue), queue=queue)
 
-@application.route('/submit', methods=['POST', 'GET'])
-def submit():
+@application.route('/add', methods=['POST'])
+def add():
     if request.method == 'POST':
-        name = ytc.add_song(request.form['link'])
-        now_playing = ytc.get_now_playing()
-        queue = ytc.get_queue()
-        return render_template('submit.html', playing=now_playing[0], q_count=len(queue), queue=queue, link=name)
-    elif request.method == 'GET':
-        now_playing = ytc.get_now_playing()
-        queue = ytc.get_queue()
-        return render_template('submit.html', playing=now_playing[0], q_count=len(queue), queue=queue)
-    else:
-        return "error"
+        new_queue = ytc.add_song(request.form['link'])
+        return render_template('queue.html', queue=new_queue, q_count=len(new_queue))
+
+    return "Error"
 
 if __name__ == '__main__':
     application.run( debug=True, host="0.0.0.0" )

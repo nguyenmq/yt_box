@@ -15,6 +15,7 @@ body {
 
 .notify {
     font-size: 32pt;
+    margin-bottom: 0px;
 }
 
 .btn {
@@ -80,6 +81,11 @@ h1 {
     font-size: 24pt;
 }
 
+#loading {
+    height: 30px;
+    margin-left: 10px;
+}
+
 #queue_container {
     padding: 1em;
     text-align: left;
@@ -105,8 +111,13 @@ h1 {
     color: #FDF6E3;
 }
 
+#new_vid {
+    margin: 0px;
+}
+
 #submission {
     margin-top: 1em;
+    display: none;
 }
 
 a {

@@ -13,6 +13,7 @@ to queue them on the server.
 + nginx
 + uWSGI
 + youtube_dl
++ jQuery
 
 ### Installation
 

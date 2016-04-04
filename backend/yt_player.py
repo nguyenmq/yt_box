@@ -65,8 +65,13 @@ class yt_player:
                 #for item in self._q:
                 #    print("{} = {}".format(item[0], item[1]))
                 self._qlock.release()
-                msg = {"cmd" : yt_rpc.CMD_RSP_ADD_VIDEO, "name" : tokens[0] }
-                link[0].sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
+
+            # TODO: return an error if url is malformed
+            q = []
+            for vid in self._q:
+                q.append({"name" : vid[0], "id" : vid[1]})
+            msg = {"cmd" : yt_rpc.CMD_RSP_ADD_VIDEO, "videos" : q }
+            link[0].sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 
     def _hndlr_enqueue(self, sock, parsed_json):
         """
