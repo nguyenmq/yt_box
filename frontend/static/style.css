@@ -29,7 +29,7 @@ body {
     -moz-border-radius: 28;
     border-radius: 28px;
     font-family: Arial;
-    color: #FDF6E3;
+    color: white;
     font-size: 30px;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
@@ -52,11 +52,16 @@ input {
     font-size: 34pt;
     margin-top: 1em;
     background: #93A1A1;
-    color: #FDF6E3;
+    color: white;
     -webkit-border-radius: 28;
     -moz-border-radius: 28;
     border-radius: 28px;
     padding: 10px 20px 10px 20px;
+}
+
+#submit_btn:disabled {
+    /* background: #325975; */
+    background: #195B89;
 }
 
 #text_label {
@@ -94,21 +99,21 @@ h1 {
 }
 
 #np {
-    color: #FDF6E3;
+    color: white;
 }
 
 #banner_title {
     font-size: 32pt;
     padding: 20px;
     margin: 0px;
-    color: #FDF6E3;
+    color: white;
 }
 
 #banner {
     width: 100%;
     background: #268BD2;
     margin-bottom: 3em;
-    color: #FDF6E3;
+    color: white;
 }
 
 #queue_title {
@@ -126,5 +131,5 @@ h1 {
 }
 
 a {
-    color: #6C71C4;
+    color: white;
 }

@@ -23,7 +23,7 @@ class yt_player:
         self._jobcv = threading.Condition()
 
         # Now playing title
-        self._now_playing = ("None","00")
+        self._now_playing = ("None","0")
 
         # Log video submissions
         # self._log = open(file="submissions.txt", mode="a", buffering=1)
@@ -127,7 +127,7 @@ class yt_player:
         self._qlock.release()
 
         if video is None:
-            self._now_playing = ("None", 00)
+            self._now_playing = ("None", 0)
         else:
             self._now_playing = video
 

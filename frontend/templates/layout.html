@@ -7,7 +7,16 @@
 
     <body>
         <div id="banner">
-            <h1 id="banner_title"><a id="np" href="/">Now Playing:</a> {{ playing|e }}</h1>
+            <h1 id="banner_title">
+                <span id="np">Now Playing:</span>
+                <span id="np_song">
+                    {% if id == 0 %}
+                        {{ name }}
+                    {% else %}
+                        <a href="https://www.youtube.com/watch?v={{ id }}" target="_blank">{{ name }}</a>
+                    {% endif %}
+                </span>
+            </h1>
         </div>
 
         <form id="link_form">
