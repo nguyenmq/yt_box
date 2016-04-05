@@ -1,33 +1,31 @@
 <html>
     <head>
+        {% block head %}
         <link rel="stylesheet" href='/static/style.css'>
         <script src="/static/jquery-2.2.2.min.js" type="text/javascript"></script>
-        <script src="/static/behavior.js" type="text/javascript"></script>
+        {% endblock %}
     </head>
 
     <body>
         <div id="banner">
-            <h1 id="banner_title">
-                <span id="np">Now Playing:</span>
-                <span id="np_song">
-                    {% include 'now_playing.html' %}
-                </span>
-            </h1>
+            {% block banner %}{% endblock %}
         </div>
 
-        <form id="link_form">
+        <form id="link_form" method="post" action="">
             <div>
-                <div><label id="text_label" for="link">Paste a YouTube Link:</label></div>
-                <input type="text" id="link" name="link">
+                <div><label id="text_label" for="link">{% block text_label %}{% endblock %}</label></div>
+                <input type="text" id="link" name="submit_box">
             </div>
 
             <div class="button">
-                <button id="submit_btn" class="btn">Submit Link</button>
+                {% block button_type %}{% endblock %}
             </div>
         </form>
 
-        <div id="queue_container">
-            {% include "queue.html" %}
-        </div>
+        {% block queue_list %}
+        {% endblock %}
+
+        {% block footer %}
+        {% endblock %}
     </body>
 </html>

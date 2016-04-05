@@ -4,6 +4,7 @@ body {
     font-family: sans-serif;
     text-align: center;
     margin: 0px;
+    position: relative;
 }
 
 .button {
@@ -84,11 +85,13 @@ h1 {
 .queue {
     text-align: left;
     font-size: 24pt;
+    padding-bottom: 8pt;
 }
 
 #loading {
     height: 30px;
     margin-left: 10px;
+    display: none;
 }
 
 #queue_container {
@@ -96,6 +99,7 @@ h1 {
     text-align: left;
     width: 720px;
     margin:0 auto;
+    padding-bottom: 5em;
 }
 
 #np {
@@ -109,6 +113,24 @@ h1 {
     color: white;
 }
 
+#footer {
+    width: 100%;
+    background: #00242E;
+    margin-bottom: 0px;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    margin-top: 1em;
+}
+
+#footer p {
+    padding: 8px;
+    padding-bottom: 20px;
+    margin: 0px;
+    float: right;
+    font-size: 18pt;
+}
+
 #banner {
     width: 100%;
     background: #268BD2;
@@ -117,8 +139,12 @@ h1 {
 }
 
 #queue_title {
-    text-decoration: underline;
     color: #6C71C4;
+    display: inline;
+}
+
+#queue_title span {
+    text-decoration: underline;
 }
 
 #new_vid {

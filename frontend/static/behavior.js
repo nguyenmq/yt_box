@@ -3,13 +3,13 @@ $(document).ready(function(){
     $("#link_form").submit(function (e) {
         e.preventDefault();
 
-        $("#queue_title").append('<img src="/static/loading_spinner.gif" id="loading">');
+        $("#loading").show()
         $("#submit_btn").prop("disabled", true);
         $("#submit_btn").text("Submitting");
 
         $.post("/add", $("input"), function(data, status) {
+            $("#loading").hide()
             $("#link").val("");
-            $("#loading").remove()
             $("#queue_container").empty();
             $("#queue_container").append(data);
             $("#submit_btn").prop("disabled", false);
@@ -21,6 +21,7 @@ $(document).ready(function(){
 
     // refreshes the now playing banner and queue
     function refresh_elements() {
+        $("#loading").show()
         $.get("/now_playing", function(data, status){
             $("#np_song").empty();
             $("#np_song").append(data);
@@ -32,6 +33,7 @@ $(document).ready(function(){
             $("#queue_title").click(refresh_elements);
             $("#queue_title").on("tap", refresh_elements);
         });
+        $("#loading").hide()
     };
 
     // click on the queue title to refresh things

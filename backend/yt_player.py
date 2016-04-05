@@ -23,7 +23,7 @@ class yt_player:
         self._jobcv = threading.Condition()
 
         # Now playing title
-        self._now_playing = ("None","0")
+        self._now_playing = ("None", 0)
 
         # Log video submissions
         self._log = open(file="submissions.md", mode="a", buffering=1)
@@ -50,7 +50,6 @@ class yt_player:
             self._jobcv.acquire()
             while len(self._jobq) == 0:
                 self._jobcv.wait()
-            print( "{} reporting in".format(threading.get_ident() % 100))
             sock, parsed_json = self._jobq.popleft()
             self._jobcv.release()
 
@@ -129,8 +128,9 @@ class yt_player:
 
     def parse_msg(self, sock, msg):
         """
-        Parses incoming RPC messages and passes the command to the relevant
-        callback handler.
+        Parses incoming RPC messages to verify there is a valid a command in
+        the message and then appends the message to the job queue where it'll
+        be handled by a thread in the pool.
 
         :param msg: Received message
         :type msg: string

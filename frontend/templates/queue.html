@@ -1,6 +1,7 @@
 <h1 id="queue_title">
-    Items in the queue ({{ q_count }}):
+    <span>Items in the queue ({{ q_count }})</span>:
 </h1>
+<img src="/static/loading_spinner.gif" id="loading">
 
 <ol id="queue_list">
 {% for item in queue %}
