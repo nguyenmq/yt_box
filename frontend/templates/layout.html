@@ -10,11 +10,7 @@
             <h1 id="banner_title">
                 <span id="np">Now Playing:</span>
                 <span id="np_song">
-                    {% if id == 0 %}
-                        {{ name }}
-                    {% else %}
-                        <a href="https://www.youtube.com/watch?v={{ id }}" target="_blank">{{ name }}</a>
-                    {% endif %}
+                    {% include 'now_playing.html' %}
                 </span>
             </h1>
         </div>
@@ -30,21 +26,8 @@
             </div>
         </form>
 
-        <div id="submission">
-            {% block submit %}{% endblock %}
-            <p class="notify">Video Submitted:</p>
-            <p id="new_vid" class="notify"></p>
-        </div>
-
         <div id="queue_container">
-            <h1 id="queue_title">
-                Items in the queue ({{ q_count }}):
-            </h1>
-            <ol id="queue_list">
-            {% for item in queue %}
-                <li class="queue">{{ item[0]|e }}</li>
-            {% endfor %}
-            </ol>
+            {% include "queue.html" %}
         </div>
     </body>
 </html>

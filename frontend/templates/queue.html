@@ -1,4 +1,7 @@
-<h1 id="queue_title">Items in the queue ({{ q_count }}):</h1>
+<h1 id="queue_title">
+    Items in the queue ({{ q_count }}):
+</h1>
+
 <ol id="queue_list">
 {% for item in queue %}
     <li class="queue">{{ item[0]|e }}</li>
