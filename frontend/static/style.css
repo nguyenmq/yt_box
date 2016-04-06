@@ -88,6 +88,19 @@ h1 {
     padding-bottom: 8pt;
 }
 
+.vid_info {
+    display: none;
+    margin-top: .25em;
+    margin-bottom: .4em;
+    margin-left: 1em;
+    font-size: 22pt;
+    color: white;
+}
+
+.vid_info a {
+    color: #6C71C4;
+}
+
 #loading {
     height: 30px;
     margin-left: 10px;

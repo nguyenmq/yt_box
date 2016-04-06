@@ -26,7 +26,7 @@ def index():
 @application.route('/add', methods=['POST'])
 def add():
     if 'username' in session and request.method == 'POST':
-        new_queue = ytc.add_song(request.form['submit_box'])
+        new_queue = ytc.add_song(request.form['submit_box'], session['username'])
         return render_template('queue.html', queue=new_queue, q_count=len(new_queue))
     else:
         return "Error"

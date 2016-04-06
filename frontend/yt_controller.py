@@ -6,6 +6,7 @@ import json
 import socket
 
 from yt_rpc import yt_rpc
+from yt_rpc import vid_data
 
 class yt_controller:
 
@@ -33,8 +34,8 @@ class yt_controller:
 
         return data
 
-    def add_song(self, link):
-        msg = {"cmd" : yt_rpc.CMD_REQ_ADD_VIDEO, "link" : link}
+    def add_song(self, link, username):
+        msg = {"cmd" : yt_rpc.CMD_REQ_ADD_VIDEO, "link" : link, "username" : username}
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
 
@@ -44,7 +45,8 @@ class yt_controller:
             try:
                 parsed_json = json.loads(data)
                 for vid in parsed_json['videos']:
-                    new_queue.append((vid['name'], vid['id']))
+                    new_video = vid_data(vid['name'], vid['id'], vid['username'])
+                    new_queue.append(new_video)
             except json.JSONDecodeError as e:
                 print("Did not get a valid response")
 
@@ -55,7 +57,7 @@ class yt_controller:
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
 
-        now_playing = ("None", "00")
+        now_playing = ("None", 0)
         data = self._recv_data(sock)
         if data:
             try:
@@ -71,14 +73,15 @@ class yt_controller:
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
 
-        q = []
+        new_queue = []
         data = self._recv_data(sock)
         if data:
             try:
                 parsed_json = json.loads(data)
                 for vid in parsed_json['videos']:
-                    q.append((vid['name'], vid['id']))
+                    new_video = vid_data(vid['name'], vid['id'], vid['username'])
+                    new_queue.append(new_video)
             except json.JSONDecodeError as e:
                 print("Did not get a valid response")
 
-        return q
+        return new_queue

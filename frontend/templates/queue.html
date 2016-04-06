@@ -4,7 +4,13 @@
 <img src="/static/loading_spinner.gif" id="loading">
 
 <ol id="queue_list">
-{% for item in queue %}
-    <li class="queue">{{ item[0]|e }}</li>
+{% for vid in queue %}
+    <li class="queue">
+        <span class="vid_name">{{ vid.name|e }}</span>
+        <dl class="vid_info">
+            <dt>Submitter by {{ vid.username }}</dt>
+            <dt><a href="https://www.youtube.com/watch?v={{ vid.id }}" target="_blank">Link</a></dt>
+        </dl>
+    </li>
 {% endfor %}
 </ol>

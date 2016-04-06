@@ -7,6 +7,7 @@ from collections import deque
 
 sys.path.append('../lib')
 from yt_rpc import yt_rpc
+from yt_rpc import vid_data
 
 class yt_player:
     """
@@ -30,7 +31,7 @@ class yt_player:
 
         # callback table to handle rpc
         self._callbacks = {
-            yt_rpc.CMD_REQ_ADD_VIDEO : self._hndlr_enqueue,
+            yt_rpc.CMD_REQ_ADD_VIDEO : self._hndlr_add_song,
             yt_rpc.CMD_REQ_NOW_PLY : self._hndlr_get_now_playing,
             yt_rpc.CMD_REQ_QUEUE : self._hndlr_get_queue
         }
@@ -56,7 +57,7 @@ class yt_player:
             self._callbacks[parsed_json['cmd']](sock, parsed_json)
 
 
-    def _hndlr_enqueue(self, sock, parsed_json):
+    def _hndlr_add_song(self, sock, parsed_json):
         """
         Add a video to queue.
 
@@ -68,16 +69,17 @@ class yt_player:
         complete = subprocess.run( ["youtube-dl", "-e", "--get-id", link], stdout=subprocess.PIPE, universal_newlines=True )
         if complete.returncode == 0:
             tokens = complete.stdout.split('\n')
+            new_video = vid_data(tokens[0], tokens[1], parsed_json['username'])
             self._qlock.acquire()
-            self._q.append(tokens)
+            self._q.append(new_video)
             self._qlock.release()
-            self._log.write("1. [{}](https://www.youtube.com/watch?v={})\n".format(tokens[0], tokens[1]))
+            self._log.write("1. [{}](https://www.youtube.com/watch?v={}) - {}\n".format(new_video.name, new_video.id, new_video.username))
             self._log.flush()
 
         # TODO: return an error if url is malformed
         q = []
         for vid in self._q:
-            q.append({"name" : vid[0], "id" : vid[1]})
+            q.append({"name" : vid.name, "id" : vid.id, "username" : vid.username})
         msg = {"cmd" : yt_rpc.CMD_RSP_ADD_VIDEO, "videos" : q }
         sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 
@@ -101,7 +103,7 @@ class yt_player:
         """
         q = []
         for vid in self._q:
-            q.append({"name" : vid[0], "id" : vid[1]})
+            q.append({"name" : vid.name, "id" : vid.id, "username" : vid.username})
 
         msg = {"cmd" : yt_rpc.CMD_RSP_QUEUE, "videos" : q }
         sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
