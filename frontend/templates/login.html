@@ -3,12 +3,17 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
+{% block banner %}
+    <div class="jumbotron">
+        <h2 id="welcome">yt_box</h2>
+    </div>
+{% endblock %}
 
 {% block text_label %}
-    Enter a username:
+    Enter a Username:
 {% endblock %}
 
 {% block button_type %}
-    <button id="login_btn" class="btn">Enter</button>
+    <button id="login_btn" class="btn btn-default btn-lg">Enter</button>
 {% endblock %}
 

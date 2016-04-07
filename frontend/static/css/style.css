@@ -1,0 +1,146 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    background: #DFF0D8;
+    font-size: 20px;
+}
+
+a {
+    color: #004262;
+}
+
+.list-group-item {
+    list-style: decimal-leading-zero inside;
+    display: list-item;
+    font-size: 12pt;
+}
+
+.jumbotron {
+    border-radius: 0px !important;
+    padding-top: 10pt;
+    padding-bottom: 2pt;
+    width: 100%;
+    background: #519F50;
+    color: white;
+}
+
+.glyphicon-plus {
+    color: #DFF0D8;
+}
+
+.jumbotron p {
+    margin: 0pt;
+    font-size: 12pt;
+}
+
+.jumbotron h2 {
+    margin-top: 4pt;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.vid_row {
+    font-size: 16pt;
+}
+
+.vid_row dl {
+    font-size: 12pt;
+}
+
+.queue_header {
+    display: inline;
+    margin-bottom: 0px;
+}
+
+.queue_header h2{
+    display: inline;
+}
+
+.queue_header ul {
+    padding-left: 0px;
+}
+
+.queue_header ul li {
+    display: inline;
+}
+
+.wrap {
+    white-space: nowrap;
+}
+
+#queue_container {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20pt;
+}
+
+.vid_info {
+    margin-left: 36pt;
+    margin-bottom: auto;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #F8FEFC;
+}
+
+#submit_form {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.spin {
+    -webkit-animation: spin 2000ms infinite linear;
+    animation: spin 2000ms infinite linear;
+    display: ;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+#banner_title {
+    display: inline;
+    font-size: 12pt;
+}
+
+#user_opt {
+    display: inline;
+    margin-bottom: 6pt;
+}
+
+#dropdownmenu {
+    font-size: 10pt;
+}
+#loading {
+    font-size: 16pt;
+}
+
+#banner_chevron {
+    text-align: center;
+}
+
+#welcome {
+    padding: 8pt;
+}

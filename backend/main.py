@@ -90,7 +90,7 @@ while inputs:
     if not playing:
         next_video = ytp.get_next_video()
         if next_video:
-            link = "https://www.youtube.com/watch?v={}".format(next_video[1])
+            link = "https://www.youtube.com/watch?v={}".format(next_video.id)
             args = ['/usr/bin/mpv', '--fs', link]
             child = subprocess.Popen(args)
             playing = True

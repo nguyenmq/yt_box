@@ -14,6 +14,7 @@ to queue them on the server.
 + uWSGI
 + youtube_dl
 + jQuery
++ Bootstrap
 
 ### Installation
 

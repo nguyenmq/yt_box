@@ -24,7 +24,7 @@ class yt_player:
         self._jobcv = threading.Condition()
 
         # Now playing title
-        self._now_playing = ("None", 0)
+        self._now_playing = None
 
         # Log video submissions
         self._log = open(file="submissions.md", mode="a", buffering=1)
@@ -90,7 +90,10 @@ class yt_player:
         :param parsed_json: Received json message
         :type parsed_json: parsed json object
         """
-        video = { "name" : self._now_playing[0], "id" : self._now_playing[1] }
+        if self._now_playing:
+            video = { "name" : self._now_playing.name, "id" : self._now_playing.id }
+        else:
+            video = { "name" : "None", "id" : 0 }
         msg = {"cmd" : yt_rpc.CMD_RSP_NOW_PLY, "video" : video }
         sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 
@@ -122,7 +125,7 @@ class yt_player:
         self._qlock.release()
 
         if video is None:
-            self._now_playing = ("None", 0)
+            self._now_playing = None
         else:
             self._now_playing = video
 

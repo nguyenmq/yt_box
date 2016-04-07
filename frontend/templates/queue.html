@@ -1,16 +1,25 @@
-<h1 id="queue_title">
-    <span>Items in the queue ({{ q_count }})</span>:
-</h1>
-<img src="/static/loading_spinner.gif" id="loading">
+<div class="row queue_header">
+    <ul>
+        <li><span id="loading" class="small glyphicon glyphicon-refresh" aria-hidden="true"></span></li>
+        <li><h2 id="queue_title"> Video Queue <small>({{ q_count }})</small></h2></li>
+    </ul>
+</div>
 
-<ol id="queue_list">
-{% for vid in queue %}
-    <li class="queue">
-        <span class="vid_name">{{ vid.name|e }}</span>
-        <dl class="vid_info">
-            <dt>Submitter by {{ vid.username }}</dt>
-            <dt><a href="https://www.youtube.com/watch?v={{ vid.id }}" target="_blank">Link</a></dt>
-        </dl>
-    </li>
-{% endfor %}
-</ol>
+<table class="table table-condensed table-striped">
+    <tbody>
+        {% for vid in queue %}
+        <tr class="vid_row">
+            <td>
+                {{ loop.index }}.
+            </td>
+            <td data-toggle="collapse" data-target="#vid_{{ loop.index }}">
+                <p>{{ vid.name|e }}</p>
+                <dl class="collapse" id="vid_{{ loop.index }}">
+                    <dt>Submitted by {{ vid.username }}</dt>
+                    <dt><a href="https://www.youtube.com/watch?v={{ vid.id }}" target="_blank">Link</a></dt>
+                </dl>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

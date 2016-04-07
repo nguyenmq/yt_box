@@ -1,25 +1,22 @@
 $(document).ready(function(){
-    $("#loading").hide()
-
     // submission button on click event handler
     $("#link_form").submit(function (e) {
         e.preventDefault();
 
-        $("#loading").show()
+        $("#loading").addClass("spin")
         $("#submit_btn").prop("disabled", true);
+        $("#submit_btn").addClass("disabled");
         $("#submit_btn").text("Submitting");
 
         $.post("/add", $("input"), function(data, status) {
-            $("#loading").hide()
-            $("#link").val("");
+            $("#submit_box").val("");
             $("#queue_container").empty();
             $("#queue_container").append(data);
             $("#submit_btn").prop("disabled", false);
+            $("#submit_btn").removeClass("disabled");
             $("#submit_btn").text("Submit Link");
             $("#queue_title").click(refresh_elements);
             $("#queue_title").on("tap", refresh_elements);
-            $(".vid_name").click(toggle_video_info);
-            $(".vid_name").on("tap", toggle_video_info);
         });
     });
 
@@ -27,9 +24,15 @@ $(document).ready(function(){
         $(this).siblings().toggle("fast");
     };
 
+    function toggle_wrap() {
+        $("#np_song").toggleClass("wrap");
+        $("#chevron").toggleClass("glyphicon-chevron-down");
+        $("#chevron").toggleClass("glyphicon-chevron-up");
+    }
+
     // refreshes the now playing banner and queue
     function refresh_elements() {
-        $("#loading").show()
+        $("#loading").addClass("spin")
         $.get("/now_playing", function(data, status){
             $("#np_song").empty();
             $("#np_song").append(data);
@@ -40,9 +43,6 @@ $(document).ready(function(){
             $("#queue_container").append(data);
             $("#queue_title").click(refresh_elements);
             $("#queue_title").on("tap", refresh_elements);
-            $(".vid_name").click(toggle_video_info);
-            $(".vid_name").on("tap", toggle_video_info);
-            $("#loading").hide();
         });
     };
 
@@ -54,6 +54,6 @@ $(document).ready(function(){
     $("#np").click(refresh_elements);
     $("#np").on("tap", refresh_elements);
 
-    $(".vid_name").click(toggle_video_info);
-    $(".vid_name").on("tap", toggle_video_info);
+    $("#banner").click(toggle_wrap);
+    $("#banner").on("tap", toggle_wrap);
 });
