@@ -43,6 +43,11 @@ a {
     width: 100%;
 }
 
+#banner_submit {
+    display: none;
+    margin-top: 6pt;
+}
+
 .vid_row {
     font-size: 16pt;
 }
@@ -68,7 +73,7 @@ a {
     display: inline;
 }
 
-.wrap {
+.nowrap {
     white-space: nowrap;
 }
 

@@ -5,9 +5,8 @@ import threading
 
 from collections import deque
 
-sys.path.append('../lib')
-from yt_rpc import yt_rpc
-from yt_rpc import vid_data
+sys.path.append("..")
+from lib.yt_rpc import yt_rpc, vid_data
 
 class yt_player:
     """
@@ -91,9 +90,9 @@ class yt_player:
         :type parsed_json: parsed json object
         """
         if self._now_playing:
-            video = { "name" : self._now_playing.name, "id" : self._now_playing.id }
+            video = { "name" : self._now_playing.name, "id" : self._now_playing.id, "username" : self._now_playing.username }
         else:
-            video = { "name" : "None", "id" : 0 }
+            video = { "name" : "None", "id" : 0, "username" : "None" }
         msg = {"cmd" : yt_rpc.CMD_RSP_NOW_PLY, "video" : video }
         sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 

@@ -21,7 +21,7 @@ def index():
 
     now_playing = ytc.get_now_playing()
     queue = ytc.get_queue()
-    return render_template('index.html', name=now_playing[0], id=now_playing[1], q_count=len(queue), queue=queue, username=username)
+    return render_template('index.html', name=now_playing.name, id=now_playing.id, username=now_playing.username, q_count=len(queue), queue=queue, user=username)
 
 @application.route('/add', methods=['POST'])
 def add():
@@ -43,7 +43,7 @@ def queue():
 def now_playing():
     if 'username' in session and request.method == 'GET':
         now_playing = ytc.get_now_playing()
-        return render_template('now_playing.html', name=now_playing[0], id=now_playing[1] )
+        return render_template('now_playing.html', name=now_playing.name, id=now_playing.id, username=now_playing.username )
     else:
         return "Error"
 

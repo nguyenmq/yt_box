@@ -4,9 +4,10 @@
 
 import json
 import socket
+import sys
 
-from yt_rpc import yt_rpc
-from yt_rpc import vid_data
+sys.path.append("..")
+from lib.yt_rpc import yt_rpc, vid_data
 
 class yt_controller:
 
@@ -62,7 +63,7 @@ class yt_controller:
         if data:
             try:
                 parsed_json = json.loads(data)
-                now_playing = (parsed_json['video']['name'], parsed_json['video']['id'])
+                now_playing = vid_data(parsed_json['video']['name'], parsed_json['video']['id'], parsed_json['video']['username'])
             except json.JSONDecodeError as e:
                 print("Did not get a valid response")
 

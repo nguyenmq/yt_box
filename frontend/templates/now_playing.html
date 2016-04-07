@@ -2,4 +2,5 @@
     {{ name|e }}
 {% else %}
     <a href="https://www.youtube.com/watch?v={{ id }}" target="_blank">{{ name|e }}</a>
+    <p id="banner_submit">Submitted by {{ username|e }}</p>
 {% endif %}

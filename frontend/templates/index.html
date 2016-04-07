@@ -9,7 +9,7 @@
     <div class="jumbotron">
         <p id="banner_title">Now Playing:</p>
 
-        <h2 class="wrap" id="np_song">
+        <h2 class="nowrap" id="np_song">
             {% include "now_playing.html" %}
         </h2>
         <p id="banner_chevron"><span id="chevron" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></p>
@@ -23,7 +23,7 @@
 {% block drop %}
     <div class="dropdown pull-right" id="user_opt">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            {{ username }}
+            {{ user }}
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">

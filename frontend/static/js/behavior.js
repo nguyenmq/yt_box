@@ -24,10 +24,22 @@ $(document).ready(function(){
         $(this).siblings().toggle("fast");
     };
 
+    function disable_wrap() {
+        $("#np_song").addClass("nowrap");
+        $("#chevron").addClass("glyphicon-chevron-down");
+        $("#chevron").removeClass("glyphicon-chevron-up");
+        $("#banner_submit").hide();
+    }
+
     function toggle_wrap() {
-        $("#np_song").toggleClass("wrap");
-        $("#chevron").toggleClass("glyphicon-chevron-down");
-        $("#chevron").toggleClass("glyphicon-chevron-up");
+        if($("#np_song").hasClass("nowrap")) {
+            $("#np_song").removeClass("nowrap");
+            $("#chevron").removeClass("glyphicon-chevron-down");
+            $("#chevron").addClass("glyphicon-chevron-up");
+            $("#banner_submit").show();
+        } else {
+            disable_wrap();
+        }
     }
 
     // refreshes the now playing banner and queue
@@ -36,6 +48,7 @@ $(document).ready(function(){
         $.get("/now_playing", function(data, status){
             $("#np_song").empty();
             $("#np_song").append(data);
+            disable_wrap();
         });
 
         $.get("/queue", function(data, status){
