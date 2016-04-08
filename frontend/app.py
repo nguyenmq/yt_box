@@ -1,16 +1,21 @@
 #-------------------------------------------------------------------------------
 # Main flask application
 #-------------------------------------------------------------------------------
+import sys
 
+sys.path.append('..')
 from flask import Flask, render_template, request, session, redirect, url_for
 from yt_controller import yt_controller
+from lib.yt_config import yt_config
 
-ytc = yt_controller('/tmp/yt_player')
+config = yt_config()
+
+ytc = yt_controller(config.host, config.port)
 application = Flask(__name__)
 
 # TODO: to be set from config file someday. This isn't meant to be public
 # facing site so it doesn't matter for now.
-application.secret_key = 'blahblah'
+application.secret_key = config.secret_key
 
 @application.route('/')
 def index():

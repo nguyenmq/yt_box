@@ -4,7 +4,9 @@ import socket
 import subprocess
 import sys
 
+sys.path.append('..')
 from yt_player import yt_player
+from lib.yt_config import yt_config
 
 def extract_msgs(sock, messages):
     """
@@ -46,17 +48,18 @@ def extract_msgs(sock, messages):
 #-----------------------------------------------------------
 # Start of application
 #-----------------------------------------------------------
-hostname = "/tmp/yt_player"
+config = yt_config()
+
 ytp = yt_player()
 
 try:
-    os.unlink( hostname )
+     os.unlink(config.host)
 except OSError:
-    if os.path.exists( hostname ):
+    if os.path.exists(config.host):
         raise
 
-listen = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-listen.bind( hostname )
+listen = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+listen.bind( (config.host, config.port) )
 listen.listen(10)
 
 inputs = [listen]
@@ -92,7 +95,9 @@ while inputs:
         if next_video:
             print("\nNow Playing: {}\n".format(next_video.name))
             link = "https://www.youtube.com/watch?v={}".format(next_video.id)
-            args = ['/usr/bin/mpv', '--fs', link]
+
+            raw_args = str(config.player).format(link)
+            args = raw_args.split(' ')
             child = subprocess.Popen(args)
             playing = True
 

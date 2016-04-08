@@ -5,7 +5,7 @@ import threading
 
 from collections import deque
 
-sys.path.append("..")
+#sys.path.append("..")
 from lib.yt_rpc import yt_rpc, vid_data
 
 class yt_player:

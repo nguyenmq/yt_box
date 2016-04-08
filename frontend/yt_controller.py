@@ -11,13 +11,15 @@ from lib.yt_rpc import yt_rpc, vid_data
 
 class yt_controller:
 
-    def __init__(self, hostname):
+    def __init__(self, hostname, port):
         self._bufsz = 4096
         self._hostname = hostname
+        self._port = port
+
 
     def _send_data(self, msg):
-        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        sock.connect(self._hostname)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((self._hostname, self._port))
         sock.sendall(msg)
         return sock
 
