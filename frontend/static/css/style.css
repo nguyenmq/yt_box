@@ -50,9 +50,25 @@ a {
 
 .vid_row {
     font-size: 16pt;
+    cursor: pointer;
 }
 
 .vid_row dl {
+    font-size: 12pt;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.vid_row p {
+    padding: 0px;
+    margin: 0px;
+}
+
+.btn-group {
+    padding-top: 6px;
+}
+
+.queue_song_hint {
     font-size: 12pt;
 }
 
@@ -153,3 +169,9 @@ a {
 #welcome {
     padding: 8pt;
 }
+
+.queue_song {
+    cursor: pointer;
+}
+
+

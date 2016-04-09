@@ -8,16 +8,23 @@
 <table class="table table-condensed table-striped">
     <tbody>
         {% for vid in queue %}
-        <tr class="vid_row">
-            <td>
+        <tr class="vid_row" >
+            <td class="queue_song" data-toggle="collapse" data-target="#vid_{{ loop.index }}">
                 {{ loop.index }}.
             </td>
-            <td data-toggle="collapse" data-target="#vid_{{ loop.index }}">
-                <p>{{ vid.name|e }}</p>
+            <td>
+                <p class="queue_song" data-toggle="collapse" data-target="#vid_{{ loop.index }}">{{ vid.name|e }}</p>
                 <dl class="collapse" id="vid_{{ loop.index }}">
                     <dt>Submitted by {{ vid.username }}</dt>
-                    <dt><a href="https://www.youtube.com/watch?v={{ vid.id }}" target="_blank">Link</a></dt>
+                    <dt>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="song actions">
+                          <a class="btn btn-default" href="https://www.youtube.com/watch?v={{ vid.id }}" target="_blank">View</a>
+                        </div>
+                    </dt>
                 </dl>
+            </td>
+            <td class="queue_song" data-toggle="collapse" data-target="#vid_{{ loop.index }}">
+                <span class="queue_song_hint glyphicon glyphicon-collapse-down"></span>
             </td>
         </tr>
         {% endfor %}
