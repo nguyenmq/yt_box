@@ -139,8 +139,6 @@ class yt_player:
         :param msg: Received message
         :type msg: string
         """
-        response = "".encode('utf-8')
-
         try:
             parsed_json = json.loads(msg)
             if 'cmd' in parsed_json:
@@ -156,6 +154,4 @@ class yt_player:
         except json.JSONDecodeError as e:
             print(e)
             print( "json: {}".format(msg))
-
-        return response
 

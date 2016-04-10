@@ -21,6 +21,7 @@ def extract_msgs(sock, messages):
     """
     # some state variables
     bracket_cnt = 0
+    quote_cnt = 0
     start = 0
     end = 0
 
@@ -30,16 +31,20 @@ def extract_msgs(sock, messages):
     # closing bracket of a message
     for i, c in enumerate(messages):
         end = i
-        if c is '{':
+
+        # count the double quotes around strings
+        if c is '"' and messages[i - 1] is not '\\':
+            quote_cnt = quote_cnt + 1
+
+        # only count the curly brackets when they're not
+        # within strings
+        if c is '{' and quote_cnt % 2 is 0:
             bracket_cnt = bracket_cnt + 1
-        elif c is '}':
+        elif c is '}' and quote_cnt % 2 is 0:
             bracket_cnt = bracket_cnt - 1
 
         if bracket_cnt is 0:
-            response = ytp.parse_msg(sock, messages[start:end+1])
-            #if response is not None:
-            #    sock.sendall(response)
-
+            ytp.parse_msg(sock, messages[start:end+1])
             start = end + 1
 
     # TODO: deal with partial messages
@@ -75,7 +80,6 @@ while inputs:
             connection, client_address = sock.accept()
             connection.setblocking(0)
             inputs.append(connection)
-            print( "New connection" )
         else:
             data = sock.recv(1024)
             if data:
@@ -83,7 +87,6 @@ while inputs:
             else:
                 sock.close()
                 inputs.remove(sock)
-                print( "Removed socket" )
 
     if child:
         return_code = child.poll()

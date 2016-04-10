@@ -2,6 +2,7 @@
 
 {% block head %}
     {{ super() }}
+    <title>yt_box: Login</title>
 {% endblock %}
 {% block banner %}
     <div class="jumbotron">
@@ -10,7 +11,11 @@
 {% endblock %}
 
 {% block text_label %}
-    Enter a Username:
+    {% if retry %}
+        Username cannot be blank
+    {% else %}
+        Enter a Username:
+    {% endif %}
 {% endblock %}
 
 {% block button_type %}

@@ -29,8 +29,8 @@ def index():
 @application.route('/add', methods=['POST'])
 def add():
     if 'username' in session and request.method == 'POST':
-        new_queue = ytc.add_song(request.form['submit_box'], session['username'])
-        return render_template('queue.html', queue=new_queue, q_count=len(new_queue))
+        ytc.add_song(request.form['submit_box'], session['username'])
+        return "Success"
     else:
         return "Error"
 
@@ -52,11 +52,15 @@ def now_playing():
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
+    retry = False
     if request.method == 'POST':
-        session['username'] = request.form['submit_box']
-        return redirect(url_for('index'))
-    else:
-        return render_template('login.html')
+        if len(request.form['submit_box']) > 0:
+            session['username'] = request.form['submit_box']
+            return redirect(url_for('index'))
+        else:
+            retry = True
+
+    return render_template('login.html', retry=retry )
 
 @application.route('/logout')
 def logout():

@@ -1,6 +1,9 @@
-{% if id == 0 %}
-    {{ name|e }}
-{% else %}
-    <a href="https://www.youtube.com/watch?v={{ id }}" target="_blank">{{ name|e }}</a>
-    <p id="banner_submit">Submitted by {{ username|e }}</p>
+<p id="banner_title">Now Playing:</p>
+<h2 class="nowrap" id="np_song">{{ name|e }}</h2>
+{% if id != 0 %}
+    <div id="banner_detail">
+        <p>Submitted by {{ username|e }}</p>
+        <p><a href="https://www.youtube.com/watch?v={{ id }}" target="_blank">Link</a></p>
+    </div>
+    <p id="banner_chevron"><span id="chevron" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></p>
 {% endif %}
