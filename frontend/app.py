@@ -13,8 +13,6 @@ config = yt_config()
 ytc = yt_controller(config.host, config.port)
 application = Flask(__name__)
 
-# TODO: to be set from config file someday. This isn't meant to be public
-# facing site so it doesn't matter for now.
 application.secret_key = config.secret_key
 
 @application.route('/')

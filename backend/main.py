@@ -96,8 +96,9 @@ while inputs:
             print("\nNow Playing: {}\n".format(next_video.name))
             link = "https://www.youtube.com/watch?v={}".format(next_video.id)
 
-            raw_args = str(config.player).format(link)
-            args = raw_args.split(' ')
+            args = [config.player]
+            raw_args = str(config.player_args).format(link)
+            args.extend(raw_args.split(' '))
             child = subprocess.Popen(args)
             playing = True
 

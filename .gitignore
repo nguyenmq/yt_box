@@ -1,3 +1,5 @@
 yt_box_env
 frontend/__pycache__
 frontend/submissions.txt
+config/yt_box.cfg
+config/yt_box.key
