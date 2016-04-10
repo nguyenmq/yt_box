@@ -65,9 +65,16 @@ class yt_player:
         """
         link = parsed_json['link']
 
-        complete = subprocess.run( ["youtube-dl", "-e", "--get-id", link], stdout=subprocess.PIPE, universal_newlines=True )
-        if complete.returncode == 0:
-            tokens = complete.stdout.split('\n')
+        returncode = 0
+
+        try:
+            output = subprocess.check_output( ["youtube-dl", "-e", "--get-id", link], universal_newlines=True )
+        except subprocess.CalledProcessError as e:
+            returncode = e.returncode
+            output = e.output
+
+        if returncode == 0:
+            tokens = output.split('\n')
             new_video = vid_data(tokens[0], tokens[1], parsed_json['username'])
             self._qlock.acquire()
             self._q.append(new_video)
