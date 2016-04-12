@@ -2,6 +2,7 @@
 # Main flask application
 #-------------------------------------------------------------------------------
 import sys
+from datetime import timedelta
 
 sys.path.append('..')
 from flask import Flask, render_template, request, session, redirect, url_for
@@ -14,6 +15,7 @@ ytc = yt_controller(config.host, config.port)
 application = Flask(__name__)
 
 application.secret_key = config.secret_key
+application.permanent_session_lifetime = timedelta(days=1)
 
 @application.route('/')
 def index():
@@ -56,6 +58,7 @@ def login():
     if request.method == 'POST':
         if len(request.form['submit_box']) > 0:
             session['username'] = request.form['submit_box']
+            session.permanent = True
             return redirect(url_for('index'))
         else:
             retry = True

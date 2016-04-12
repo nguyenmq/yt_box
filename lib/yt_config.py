@@ -12,6 +12,7 @@ class yt_config:
         # application setttings
         self.player = config.get('application', 'player', fallback='echo')
         self.player_args = config.get('application', 'player_args', fallback='{0}')
+        self.player_enable = config.getboolean('application', 'player_enable', fallback=False)
         self._extract_key(config)
 
         # connection settings

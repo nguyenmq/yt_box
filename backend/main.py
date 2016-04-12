@@ -88,20 +88,21 @@ while inputs:
                 sock.close()
                 inputs.remove(sock)
 
-    if child:
-        return_code = child.poll()
-        if return_code is not None:
-            playing = False
+    if config.player_enable:
+        if child:
+            return_code = child.poll()
+            if return_code is not None:
+                playing = False
 
-    if not playing:
-        next_video = ytp.get_next_video()
-        if next_video:
-            print("\nNow Playing: {}\n".format(next_video.name))
-            link = "https://www.youtube.com/watch?v={}".format(next_video.id)
+        if not playing:
+            next_video = ytp.get_next_video()
+            if next_video:
+                print("\nNow Playing: {}\n".format(next_video.name))
+                link = "https://www.youtube.com/watch?v={}".format(next_video.id)
 
-            args = [config.player]
-            raw_args = str(config.player_args).format(link)
-            args.extend(raw_args.split(' '))
-            child = subprocess.Popen(args)
-            playing = True
+                args = [config.player]
+                raw_args = str(config.player_args).format(link)
+                args.extend(raw_args.split(' '))
+                child = subprocess.Popen(args)
+                playing = True
 
