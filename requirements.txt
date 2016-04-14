@@ -1,0 +1,4 @@
+virtualenv
+flask
+uwsgi
+youtube-dl
