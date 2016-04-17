@@ -1,9 +1,9 @@
-<p id="banner_title">Now Playing:</p>
+<img src="/static/img/ytbox_white.svg" alt="yt_box logo" class="img-responsive" id="banner_logo">
 <h2 class="nowrap" id="np_song">{{ name|e }}</h2>
-{% if id != 0 %}
+{% if vid_id != 0 %}
     <div id="banner_detail">
         <p>Submitted by {{ username|e }}</p>
-        <p><a href="https://www.youtube.com/watch?v={{ id }}" target="_blank">Link</a></p>
+        <p><a class="btn btn-default" href="https://www.youtube.com/watch?v={{ vid.vid_id }}" target="_blank"><span class="glyphicon glyphicon-export"></span></a></p>
     </div>
     <p id="banner_chevron"><span id="chevron" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></p>
 {% endif %}

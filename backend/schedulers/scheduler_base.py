@@ -31,7 +31,7 @@ class SchedulerBase:
         """
         raise NotImplementedError
 
-    def remove_video(self, id, username):
+    def remove_video(self, vid_id, user_id):
         """
         Interface for removing a video from the scheduler's queue. The removed
         video will match the given id and username.

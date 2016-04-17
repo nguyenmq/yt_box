@@ -70,7 +70,7 @@ a {
 }
 
 .queue_song_hint {
-    font-size: 12pt;
+    font-size: 13pt;
 }
 
 .queue_header {
@@ -121,6 +121,11 @@ a {
     color: white;
 }
 
+#submit_btn img {
+    display: inline;
+    height: inherit;
+}
+
 .spin {
     -webkit-animation: spin 2000ms infinite linear;
     animation: spin 2000ms infinite linear;
@@ -150,8 +155,14 @@ a {
 }
 
 #banner_title {
-    display: inline;
+    /* display: inline; */
     font-size: 12pt;
+}
+
+#banner_logo {
+    /* display: inline; */
+    margin-bottom: 6pt;
+    max-height: 16pt;
 }
 
 #user_opt {
@@ -170,10 +181,6 @@ a {
     text-align: center;
 }
 
-#welcome {
-    padding: 8pt;
-}
-
 .queue_song {
     cursor: pointer;
 }
@@ -186,4 +193,13 @@ a {
 .queue_tool li {
     display: inline;
     margin-right: 10px;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#logo {
+    margin-bottom: 15px;
+    max-height: 90px;
 }

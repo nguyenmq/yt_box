@@ -1,0 +1,5 @@
+{
+"cmd" : "CMD_REQ_REM_VIDEO",
+"vid_id" : "VMamoan2JwA",
+"user_id" : 1
+}

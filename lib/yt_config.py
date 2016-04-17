@@ -16,6 +16,7 @@ class yt_config:
         self.player_enable = config.getboolean('application', 'player_enable', fallback=False)
         self._scheduler_path = config.get('application', 'scheduler', fallback='fifo.FIFOScheduler')
         self._extract_key(config)
+        self.db_path = config.get('application', 'db_path', fallback='../config/yt_box.db')
 
         # connection settings
         self.host = config.get('connection', 'host', fallback='localhost')

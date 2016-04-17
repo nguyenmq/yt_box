@@ -107,6 +107,7 @@ $(document).ready(function(){
                         $("#queue_title").click(refresh_elements);
                         $("#queue_title").on("tap", refresh_elements);
                         $(".queue_rm").click(remove_song);
+                        flip_collapse_hint();
                     },
                 });
             },
@@ -120,7 +121,7 @@ $(document).ready(function(){
         $.ajax({
             url: "/remove",
             type: "POST",
-            data: { 'id' : event.currentTarget.id },
+            data: { 'vid_id' : event.currentTarget.id },
             error: function(jqXHR, textStatus, errorThrown) {
                 if(jqXHR.status == 500) {
                     $("#alert_area").empty();
@@ -135,6 +136,28 @@ $(document).ready(function(){
         });
     };
 
+    /*----------------------------------------------------------------
+    Registers handlers to flip the collapse hint on a song in the
+    queue
+    ----------------------------------------------------------------*/
+    function flip_collapse_hint() {
+        // go from arrow down to up when the song details
+        // are shown
+        $("[id^=vid_]").on('shown.bs.collapse', function(event) {
+            var song_hint = $(this).parent().next().children(".glyphicon-collapse-down")
+            song_hint.removeClass("glyphicon-collapse-down")
+            song_hint.addClass("glyphicon-collapse-up")
+        });
+
+        // go from arrow up to down when the songs details
+        // are hidden
+        $("[id^=vid_]").on('hidden.bs.collapse', function(event) {
+            var song_hint = $(this).parent().next().children(".glyphicon-collapse-up")
+            song_hint.removeClass("glyphicon-collapse-up")
+            song_hint.addClass("glyphicon-collapse-down")
+        });
+    }
+
     // Register handler on queue items to remove song
     $(".queue_rm").click(remove_song);
 
@@ -145,4 +168,6 @@ $(document).ready(function(){
     // Regiser handler to toggle wrap on now playing banner
     $("#banner").click(toggle_wrap);
     $("#banner").on("tap", toggle_wrap);
+
+    flip_collapse_hint();
 });

@@ -98,7 +98,7 @@ while inputs:
             next_video = ytp.get_next_video()
             if next_video:
                 print("\nNow Playing: {}\n".format(next_video.name))
-                link = "https://www.youtube.com/watch?v={}".format(next_video.id)
+                link = "https://www.youtube.com/watch?v={}".format(next_video.vid_id)
 
                 args = [config.player]
                 raw_args = str(config.player_args).format(link)

@@ -1,0 +1,5 @@
+{
+"cmd" : "CMD_REQ_ADD_VIDEO",
+"link" : "https://www.youtube.com/watch?v=VMamoan2JwA",
+"user_id" : "1"
+}

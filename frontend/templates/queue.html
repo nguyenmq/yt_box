@@ -16,23 +16,23 @@
                 <p class="queue_song" data-toggle="collapse" data-target="#vid_{{ loop.index }}">{{ vid.name|e }}</p>
                 <dl class="collapse" id="vid_{{ loop.index }}">
                     <dt>
-                        {% if vid.username == user %}
+                        {% if vid.user_id == user_id %}
                         Submitted by You
                         {% else %}
                         Submitted by {{ vid.username }}
                         {% endif %}
                     </dt>
                     <dt class="queue_tool">
-                        <li><a class="btn btn-default" href="https://www.youtube.com/watch?v={{ vid.id }}" target="_blank"><span class="glyphicon glyphicon-export"></span></a></li>
-                        {% if vid.username == user %}
-                        <li><button id="{{ vid.id }}" type="button" class="btn btn-default queue_rm"><span class="glyphicon glyphicon-remove"></span></button></li>
+                        <li><a class="btn btn-default" href="https://www.youtube.com/watch?v={{ vid.vid_id }}" target="_blank"><span class="glyphicon glyphicon-export"></span></a></li>
+                        {% if vid.user_id == user_id %}
+                        <li><button id="{{ vid.vid_id }}" type="button" class="btn btn-default queue_rm"><span class="glyphicon glyphicon-remove"></span></button></li>
                         {% endif %}
                     </dt>
                 </dl>
             </td>
             <td class="queue_song" data-toggle="collapse" data-target="#vid_{{ loop.index }}">
                 <span class="queue_song_hint glyphicon glyphicon-collapse-down"></span>
-                {% if vid.username == user %}
+                {% if vid.user_id == user_id %}
                 <span class="queue_song_hint glyphicon glyphicon-user"></span>
                 {% endif %}
             </td>
