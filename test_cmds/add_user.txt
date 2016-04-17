@@ -1,0 +1,5 @@
+{
+    "cmd" : "CMD_REQ_ADD_USER",
+    "username" : "Kid B",
+    "user_id" : 0
+}

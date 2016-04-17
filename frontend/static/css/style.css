@@ -20,12 +20,12 @@ a {
 
 .jumbotron {
     border-radius: 0px !important;
-    padding-top: 10pt;
-    padding-bottom: 2pt;
+    padding: 10px;
     width: 100%;
     background: #519F50;
     /* background: #A54242; unlocks the red theme */
     color: white;
+    cursor: pointer;
 }
 
 .glyphicon-plus {
@@ -40,13 +40,6 @@ a {
 .jumbotron h2 {
     margin-top: 4pt;
     padding-bottom: 4pt;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-}
-
-#banner_detail {
-    display: none;
 }
 
 .vid_row {
@@ -70,7 +63,7 @@ a {
 }
 
 .queue_song_hint {
-    font-size: 12pt;
+    font-size: 13pt;
 }
 
 .queue_header {
@@ -90,8 +83,25 @@ a {
     display: inline;
 }
 
-.nowrap {
+#np_placeholder {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: height 0.5s ease;
+}
+
+#np_song {
+    white-space: nowrap;
+    overflow: hidden;
+    transition: height 0.5s ease;
+    display: none;
+}
+
+#np_song.extend {
+    white-space: normal;
+    overflow: hidden;
+    transition: height 0.5s ease;
+    text-overflow: initial;
 }
 
 #queue_container {
@@ -119,6 +129,11 @@ a {
     background: #519F50;
     /* background: #A54242; unlocks the red theme */
     color: white;
+}
+
+#submit_btn img {
+    display: inline;
+    height: inherit;
 }
 
 .spin {
@@ -150,8 +165,14 @@ a {
 }
 
 #banner_title {
-    display: inline;
+    /* display: inline; */
     font-size: 12pt;
+}
+
+#banner_logo {
+    /* display: inline; */
+    margin-bottom: 6pt;
+    max-height: 16pt;
 }
 
 #user_opt {
@@ -170,10 +191,6 @@ a {
     text-align: center;
 }
 
-#welcome {
-    padding: 8pt;
-}
-
 .queue_song {
     cursor: pointer;
 }
@@ -186,4 +203,13 @@ a {
 .queue_tool li {
     display: inline;
     margin-right: 10px;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#logo {
+    margin-bottom: 15px;
+    max-height: 90px;
 }

@@ -23,7 +23,7 @@ class FIFOScheduler(SchedulerBase):
         """
         self._q.append(video)
 
-    def remove_video(self, id, username):
+    def remove_video(self, vid_id, user_id):
         """
         Remove the given video from the queue.
 
@@ -36,12 +36,10 @@ class FIFOScheduler(SchedulerBase):
         :return: True if video was found and removed; False otherwise
         :type: boolean
         """
-        rem_vid = None
         success = False
 
         for video in self._q:
-            if video.id == id and video.username == username:
-                rem_vid = video
+            if video.vid_id == vid_id and video.user_id == user_id:
                 self._q.remove(video)
                 success = True
                 break

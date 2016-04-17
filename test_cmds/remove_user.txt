@@ -1,0 +1,5 @@
+{
+    "cmd" : "CMD_REQ_REM_USER",
+    "username" : "Kid A",
+    "user_id" : 1
+}
