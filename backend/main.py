@@ -55,7 +55,7 @@ def extract_msgs(sock, messages):
 #-----------------------------------------------------------
 config = yt_config()
 
-ytp = yt_player()
+ytp = yt_player(config)
 
 try:
      os.unlink(config.host)

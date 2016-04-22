@@ -1,11 +1,8 @@
 import json
 import subprocess
-import sys
 import threading
-
 from collections import deque
 
-#sys.path.append("..")
 from lib.yt_rpc import yt_rpc, vid_data
 
 class yt_player:
@@ -13,9 +10,11 @@ class yt_player:
     Manages the video queue
     """
 
-    def __init__(self):
+    def __init__(self, config):
         # Video queue and mutex
-        self._q = deque([])
+
+        scheduler = config.get_scheduler()
+        self._scheduler = scheduler()
         self._qlock = threading.Lock()
 
         # Thread job queue and condition variable
@@ -77,14 +76,14 @@ class yt_player:
             tokens = output.split('\n')
             new_video = vid_data(tokens[0], tokens[1], parsed_json['username'])
             self._qlock.acquire()
-            self._q.append(new_video)
+            self._scheduler.add_video(new_video)
             self._qlock.release()
             self._log.write("1. [{}](https://www.youtube.com/watch?v={}) - {}\n".format(new_video.name, new_video.id, new_video.username))
             self._log.flush()
 
         # TODO: return an error if url is malformed
         q = []
-        for vid in self._q:
+        for vid in self._scheduler.get_playlist():
             q.append({"name" : vid.name, "id" : vid.id, "username" : vid.username})
         msg = {"cmd" : yt_rpc.CMD_RSP_ADD_VIDEO, "videos" : q }
         sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
@@ -111,7 +110,7 @@ class yt_player:
         :type parsed_json: parsed json object
         """
         q = []
-        for vid in self._q:
+        for vid in self._scheduler.get_playlist():
             q.append({"name" : vid.name, "id" : vid.id, "username" : vid.username})
 
         msg = {"cmd" : yt_rpc.CMD_RSP_QUEUE, "videos" : q }
@@ -126,8 +125,7 @@ class yt_player:
         """
         video = None
         self._qlock.acquire()
-        if len(self._q) > 0:
-            video = self._q.popleft()
+        video = self._scheduler.get_next_video()
         self._qlock.release()
 
         if video is None:
