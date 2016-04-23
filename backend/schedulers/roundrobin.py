@@ -36,6 +36,21 @@ class RoundRobin(SchedulerBase):
 
         self._next_round[vid_data.username] = next_round + 1
 
+    def rem_video(self, id):
+        rem_vid = None
+        for video in self._videos:
+            if video.id == id:
+                print("RR: Found {}, removing...\n".format(id))
+                rem_vid = video
+                self._next_round[rem_vid.vid_data.username] = rem_vid.round
+                self._videos.remove(rem_vid)
+                self._videos.sort()
+                break
+        else:
+            print("RR: Didn't find {} in queue...\n".format(id))
+        return rem_vid
+
+
     def get_playlist(self):
         # TODO - traverse the actual tree
         ordered_list = list(self._videos)

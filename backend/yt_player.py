@@ -30,6 +30,7 @@ class yt_player:
         # callback table to handle rpc
         self._callbacks = {
             yt_rpc.CMD_REQ_ADD_VIDEO : self._hndlr_add_song,
+            yt_rpc.CMD_REQ_REM_VIDEO : self._hndlr_remove_song,
             yt_rpc.CMD_REQ_NOW_PLY : self._hndlr_get_now_playing,
             yt_rpc.CMD_REQ_QUEUE : self._hndlr_get_queue
         }
@@ -87,6 +88,25 @@ class yt_player:
             q.append({"name" : vid.name, "id" : vid.id, "username" : vid.username})
         msg = {"cmd" : yt_rpc.CMD_RSP_ADD_VIDEO, "videos" : q }
         sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
+
+    def _hndlr_remove_song(self, sock, parsed_json):
+        """
+        Remove a video from the queue.
+
+        :param sock: Socket message received over
+        :param parsed_json: Received json message
+        """
+        vid_id = parsed_json['id']
+
+        self._qlock.acquire()
+        self._scheduler.remove_video(vid_id)
+        self._qlock.release()
+        self._log.write("Removing " + str(vid_id) + "...\n")
+        self._log.flush()
+
+        q = []
+        for vid in self._scheduler.get_playlist():
+            q.append({"name": vid.name, "id": vid.id, "username": vid.username})
 
     def _hndlr_get_now_playing(self, sock, parsed_json):
         """

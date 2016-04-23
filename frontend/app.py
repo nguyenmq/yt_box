@@ -36,6 +36,15 @@ def add():
     else:
         return "Error"
 
+@application.route('/remove', methods=['POST'])
+def remove():
+    if 'id' in request.form:
+        print("Removing")
+        ytc.remove_song(request.form['id'])
+    else:
+        print("Fail")
+    return "Success"
+
 @application.route('/queue', methods=['GET'])
 def queue():
     if 'username' in session and request.method == 'GET':
@@ -51,15 +60,6 @@ def now_playing():
         return render_template('now_playing.html', name=now_playing.name, id=now_playing.id, username=now_playing.username )
     else:
         return "Error"
-
-@application.route('/remove', methods=['POST'])
-def remove():
-    if 'id' in request.form:
-        print(request.form['id'])
-    else:
-        print("Fail")
-
-    return "Success"
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():

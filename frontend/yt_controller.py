@@ -43,7 +43,7 @@ class yt_controller:
         sock = self._send_data(json_msg)
 
         new_queue = []
-        data = self._recv_data(sock);
+        data = self._recv_data(sock)
         if len(data) > 0:
             try:
                 parsed_json = json.loads(data)
@@ -54,6 +54,22 @@ class yt_controller:
                 print("Did not get a valid response")
 
         return new_queue
+
+    def remove_song(self, id):
+        msg = {"cmd": yt_rpc.CMD_REQ_REM_VIDEO, "id" : id}
+        json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
+        sock = self._send_data(json_msg)
+
+        new_queue = []
+        data = self._recv_data(sock)
+        if len(data) > 0:
+            try:
+                parsed_json = json.loads(data)
+                for vid in parsed_json['videos']:
+                    new_video = vid_data(vid['name'], vid['id'], vid['username'])
+                    new_queue.append(new_video)
+            except json.JSONDecodeError as e:
+                print("Did not get a valid response")
 
     def get_now_playing(self):
         msg = {"cmd" : yt_rpc.CMD_REQ_NOW_PLY}

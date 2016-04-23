@@ -9,6 +9,18 @@ class FIFOScheduler(SchedulerBase):
     def add_video(self, video):
         self._q.append(video)
 
+    def remove_video(self, id):
+        rem_vid = None
+        for video in self._q:
+            if video.id == id:
+                print("Q: Found {}, removing...\n".format(id))
+                rem_vid = video
+                self._q.remove(video)
+                break
+        else:
+            print("Q: Didn't find {} in queue...\n".format(id))
+        return rem_vid
+
     def get_playlist(self):
         return self._q
 
