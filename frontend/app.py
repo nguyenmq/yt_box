@@ -38,18 +38,18 @@ def add():
 
 @application.route('/remove', methods=['POST'])
 def remove():
-    if 'id' in request.form:
-        print("Removing")
-        ytc.remove_song(request.form['id'])
+    if 'username' in session and 'id' in request.form and request.method == 'POST':
+        ytc.remove_song(request.form['id'], session['username'])
+
+        return "Success"
     else:
-        print("Fail")
-    return "Success"
+        return "Error"
 
 @application.route('/queue', methods=['GET'])
 def queue():
     if 'username' in session and request.method == 'GET':
         new_queue = ytc.get_queue()
-        return render_template('queue.html', queue=new_queue, q_count=len(new_queue))
+        return render_template('queue.html', queue=new_queue, q_count=len(new_queue), user=session['username'])
     else:
         return "Error"
 

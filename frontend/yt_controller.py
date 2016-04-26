@@ -50,13 +50,13 @@ class yt_controller:
                 for vid in parsed_json['videos']:
                     new_video = vid_data(vid['name'], vid['id'], vid['username'])
                     new_queue.append(new_video)
-            except json.JSONDecodeError as e:
+            except json.JSONDecodeError:
                 print("Did not get a valid response")
 
         return new_queue
 
-    def remove_song(self, id):
-        msg = {"cmd": yt_rpc.CMD_REQ_REM_VIDEO, "id" : id}
+    def remove_song(self, id, username):
+        msg = {"cmd": yt_rpc.CMD_REQ_REM_VIDEO, "id" : id, "username" : username }
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
 
@@ -68,8 +68,10 @@ class yt_controller:
                 for vid in parsed_json['videos']:
                     new_video = vid_data(vid['name'], vid['id'], vid['username'])
                     new_queue.append(new_video)
-            except json.JSONDecodeError as e:
+            except json.JSONDecodeError:
                 print("Did not get a valid response")
+
+        return new_queue
 
     def get_now_playing(self):
         msg = {"cmd" : yt_rpc.CMD_REQ_NOW_PLY}
@@ -82,7 +84,7 @@ class yt_controller:
             try:
                 parsed_json = json.loads(data)
                 now_playing = vid_data(parsed_json['video']['name'], parsed_json['video']['id'], parsed_json['video']['username'])
-            except json.JSONDecodeError as e:
+            except json.JSONDecodeError:
                 print("Did not get a valid response")
 
         return now_playing
@@ -100,7 +102,7 @@ class yt_controller:
                 for vid in parsed_json['videos']:
                     new_video = vid_data(vid['name'], vid['id'], vid['username'])
                     new_queue.append(new_video)
-            except json.JSONDecodeError as e:
+            except json.JSONDecodeError:
                 print("Did not get a valid response")
 
         return new_queue

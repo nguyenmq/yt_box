@@ -60,7 +60,7 @@ $(document).ready(function(){
 
     // make the ajax call to remove the target song from queue
     function remove_song(event) {
-        $.post("/remove", { 'id' : event.target.id });
+        $.post("/remove", { 'id' : event.currentTarget.id }, refresh_elements);
     };
 
     $(".queue_rm").click(remove_song);

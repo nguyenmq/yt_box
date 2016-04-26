@@ -97,16 +97,17 @@ class yt_player:
         :param parsed_json: Received json message
         """
         vid_id = parsed_json['id']
+        username = parsed_json['username']
 
         self._qlock.acquire()
-        self._scheduler.remove_video(vid_id)
+        self._scheduler.remove_video(vid_id, username)
         self._qlock.release()
-        self._log.write("Removing " + str(vid_id) + "...\n")
-        self._log.flush()
 
         q = []
         for vid in self._scheduler.get_playlist():
             q.append({"name": vid.name, "id": vid.id, "username": vid.username})
+        msg = {"cmd" : yt_rpc.CMD_RSP_REM_VIDEO, "videos" : q }
+        sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 
     def _hndlr_get_now_playing(self, sock, parsed_json):
         """

@@ -7,3 +7,6 @@ class SchedulerBase:
 
     def get_next_video(self):
         raise NotImplementedError
+
+    def remove_video(self):
+        raise NotImplementedError

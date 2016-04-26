@@ -174,4 +174,12 @@ a {
     cursor: pointer;
 }
 
+.queue_tool {
+    margin-top: 5px;
+    list-style-type: none;
+}
 
+.queue_tool li {
+    display: inline;
+    margin-right: 10px;
+}
