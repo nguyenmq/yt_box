@@ -53,8 +53,17 @@ $(document).ready(function(){
             $("#queue_container").append(data);
             $("#queue_title").click(refresh_elements);
             $("#queue_title").on("tap", refresh_elements);
+            $(".queue_rm").click(remove_song);
         });
+
     };
+
+    // make the ajax call to remove the target song from queue
+    function remove_song(event) {
+        $.post("/remove", { 'id' : event.target.id });
+    };
+
+    $(".queue_rm").click(remove_song);
 
     // click on the queue title to refresh things
     $("#queue_title").click(refresh_elements);

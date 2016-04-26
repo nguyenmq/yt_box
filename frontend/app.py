@@ -52,6 +52,15 @@ def now_playing():
     else:
         return "Error"
 
+@application.route('/remove', methods=['POST'])
+def remove():
+    if 'id' in request.form:
+        print(request.form['id'])
+    else:
+        print("Fail")
+
+    return "Success"
+
 @application.route('/login', methods=['GET', 'POST'])
 def login():
     retry = False
