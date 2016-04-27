@@ -87,7 +87,7 @@ class yt_player:
         for vid in self._scheduler.get_playlist():
             q.append({"name" : vid.name, "id" : vid.id, "username" : vid.username})
         msg = {"cmd" : yt_rpc.CMD_RSP_ADD_VIDEO, "videos" : q }
-        sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
+        self._send_response(sock, msg)
 
     def _hndlr_remove_song(self, sock, parsed_json):
         """
@@ -100,14 +100,17 @@ class yt_player:
         username = parsed_json['username']
 
         self._qlock.acquire()
-        self._scheduler.remove_video(vid_id, username)
+        success = self._scheduler.remove_video(vid_id, username)
         self._qlock.release()
 
-        q = []
-        for vid in self._scheduler.get_playlist():
-            q.append({"name": vid.name, "id": vid.id, "username": vid.username})
-        msg = {"cmd" : yt_rpc.CMD_RSP_REM_VIDEO, "videos" : q }
-        sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
+        alert = {}
+        if success == False:
+            alert = {"type" : yt_rpc.ALRT_DANGER, "emph" : "Error", "msg" : "No video found with id: {}".format(vid_id)}
+        else:
+            alert = {"type" : yt_rpc.ALRT_SUCCESS, "emph" : "Success", "msg" : "Video removed"}
+
+        msg = {"cmd" : yt_rpc.CMD_RSP_REM_VIDEO, "status" : success, "alert" : alert}
+        self._send_response(sock, msg)
 
     def _hndlr_get_now_playing(self, sock, parsed_json):
         """
@@ -121,7 +124,7 @@ class yt_player:
         else:
             video = { "name" : "None", "id" : 0, "username" : "None" }
         msg = {"cmd" : yt_rpc.CMD_RSP_NOW_PLY, "video" : video }
-        sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
+        self._send_response(sock, msg)
 
     def _hndlr_get_queue(self, sock, parsed_json):
         """
@@ -135,7 +138,7 @@ class yt_player:
             q.append({"name" : vid.name, "id" : vid.id, "username" : vid.username})
 
         msg = {"cmd" : yt_rpc.CMD_RSP_QUEUE, "videos" : q }
-        sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
+        self._send_response(sock, msg)
 
     def get_next_video(self):
         """
@@ -155,6 +158,21 @@ class yt_player:
             self._now_playing = video
 
         return video
+
+    def _send_response(self, sock, msg):
+        """
+        Sends a response back over the RPC socket. Do note that the socket is
+        closed by the select loop in main.
+
+        :param sock: The socket to send the response over
+        :type sock: socket class
+
+        :param msg: Dictionary containing the json objects to send back. This
+                    will be encoded to a proper json object.
+        :type msg: dictionary
+        """
+        if len(msg) > 0 and sock.fileno() > -1:
+            sock.sendall(json.JSONEncoder().encode(msg).encode('utf-8'))
 
     def parse_msg(self, sock, msg):
         """

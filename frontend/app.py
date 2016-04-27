@@ -5,8 +5,9 @@ import sys
 from datetime import timedelta
 
 sys.path.append('..')
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, make_response
 from yt_controller import yt_controller
+from lib.yt_rpc import yt_rpc
 from lib.yt_config import yt_config
 
 config = yt_config()
@@ -38,12 +39,24 @@ def add():
 
 @application.route('/remove', methods=['POST'])
 def remove():
-    if 'username' in session and 'id' in request.form and request.method == 'POST':
-        ytc.remove_song(request.form['id'], session['username'])
+    alrt_type = yt_rpc.ALRT_DANGER
+    alrt_emph = "Error"
+    alrt_msg = "Invalid request to remove video"
 
-        return "Success"
-    else:
-        return "Error"
+    if 'username' in session and 'id' in request.form and request.method == 'POST':
+        parsed_json = ytc.remove_song(request.form['id'], session['username'])
+
+        if parsed_json is not None:
+            alert = parsed_json['alert']
+            alrt_type = alert['type']
+            alrt_emph = alert['emph']
+            alrt_msg = alert['msg']
+
+    response = make_response(render_template('alert.html', alrt_type=alrt_type, alrt_emph=alrt_emph, alrt_msg=alrt_msg))
+    if alrt_type == yt_rpc.ALRT_DANGER:
+        response.status = 500
+
+    return response
 
 @application.route('/queue', methods=['GET'])
 def queue():
@@ -55,24 +68,41 @@ def queue():
 
 @application.route('/now_playing', methods=['GET'])
 def now_playing():
-    if 'username' in session and request.method == 'GET':
-        now_playing = ytc.get_now_playing()
-        return render_template('now_playing.html', name=now_playing.name, id=now_playing.id, username=now_playing.username )
+    alrt_type = yt_rpc.ALRT_DANGER
+    alrt_emph = "Error"
+
+    if request.method == 'GET':
+        if 'username' in session:
+            now_playing = ytc.get_now_playing()
+            response = make_response(render_template('now_playing.html', name=now_playing.name, id=now_playing.id, username=now_playing.username ))
+            response.status_code = 200
+            return response
+        else:
+            alrt_msg = "AJAX request missing a session id"
     else:
-        return "Error"
+        alrt_msg = "Now Playing request requires a GET"
+
+    response = make_response(render_template('alert.html', alrt_type=alrt_type, alrt_emph=alrt_emph, alrt_msg=alrt_msg))
+    response.status_code = 500
+    return response
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
-    retry = False
+    alrt_type = None
+    alrt_emph = None
+    err_msg = None
+
     if request.method == 'POST':
         if len(request.form['submit_box']) > 0:
             session['username'] = request.form['submit_box']
             session.permanent = True
             return redirect(url_for('index'))
         else:
-            retry = True
+            alrt_emph = "Error"
+            err_msg = "Username can't be blank"
+            alrt_type = yt_rpc.ALRT_DANGER
 
-    return render_template('login.html', retry=retry )
+    return render_template('login.html', alrt_type=alrt_type, alrt_emph=alrt_emph, alrt_msg=err_msg)
 
 @application.route('/logout')
 def logout():

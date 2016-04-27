@@ -13,6 +13,12 @@ class yt_rpc:
     CMD_RSP_QUEUE       = "CMD_RSP_QUEUE"
     CMD_RSP_NOW_PLY     = "CMD_RSP_NOW_PLY"
 
+    # alert types
+    ALRT_SUCCESS = "success"
+    ALRT_INFO    = "info"
+    ALRT_WARNING = "warning"
+    ALRT_DANGER  = "danger"
+
 class vid_data:
     """
     Represents the data for one video in the video queue

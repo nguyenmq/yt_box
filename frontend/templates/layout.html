@@ -17,6 +17,12 @@
                 {% block banner %}{% endblock %}
             </div>
 
+            <div id="alert_area">
+                {% if alrt_type %}
+                {% include "alert.html" %}
+                {% endif %}
+            </div>
+
             <div id="submit_form">
                 <form role="form" id="link_form" method="post" action="">
                     <div class="form-group">

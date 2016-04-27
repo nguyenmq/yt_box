@@ -4,7 +4,7 @@ html {
 }
 
 body {
-    background: #DFF0D8;
+    background: #F6F8EA;
     font-size: 20px;
 }
 
@@ -24,6 +24,7 @@ a {
     padding-bottom: 2pt;
     width: 100%;
     background: #519F50;
+    /* background: #A54242; unlocks the red theme */
     color: white;
 }
 
@@ -115,6 +116,9 @@ a {
 
 #submit_btn {
     width: 100pt;
+    background: #519F50;
+    /* background: #A54242; unlocks the red theme */
+    color: white;
 }
 
 .spin {

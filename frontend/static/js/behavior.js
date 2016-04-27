@@ -1,5 +1,7 @@
 $(document).ready(function(){
-    // submission button on click event handler
+    /*----------------------------------------------------------------
+    Submission button handler
+    ----------------------------------------------------------------*/
     $("#link_form").submit(function (e) {
         e.preventDefault();
 
@@ -8,19 +10,36 @@ $(document).ready(function(){
         $("#submit_btn").addClass("disabled");
         $("#submit_btn").text("Submitting");
 
-        $.post("/add", $("input"), function(data, status) {
-            $("#submit_box").val("");
-            $("#submit_btn").prop("disabled", false);
-            $("#submit_btn").removeClass("disabled");
-            $("#submit_btn").text("Submit Link");
-            refresh_elements();
+        $.ajax({
+            url: "/add",
+            type: "POST",
+            data: $("input"),
+            error: function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status == 500) {
+                    $("#alert_area").empty();
+                    $("#alert_area").append(jqXHR.responseText);
+                } else {
+                    alert("Failed to contact server");
+                }
+                $("#loading").removeClass("spin")
+                this.always()
+            },
+            success: function(data, textStatus, errorThrown) {
+                $("#submit_box").val("");
+                refresh_elements();
+                this.always()
+            },
+            always: function(jqXHR, textStatus, errorThrown) {
+                $("#submit_btn").prop("disabled", false);
+                $("#submit_btn").removeClass("disabled");
+                $("#submit_btn").text("Submit Link");
+            }
         });
     });
 
-    function toggle_video_info() {
-        $(this).siblings().toggle("fast");
-    };
-
+    /*----------------------------------------------------------------
+    Disables the wrap text on the now playing banner
+    ----------------------------------------------------------------*/
     function disable_wrap() {
         $("#np_song").addClass("nowrap");
         $("#chevron").addClass("glyphicon-chevron-down");
@@ -28,6 +47,9 @@ $(document).ready(function(){
         $("#banner_detail").hide();
     }
 
+    /*----------------------------------------------------------------
+    Toggles the wrap text on the now playing banner
+    ----------------------------------------------------------------*/
     function toggle_wrap() {
         if($("#np_song").hasClass("nowrap")) {
             $("#np_song").removeClass("nowrap");
@@ -39,36 +61,88 @@ $(document).ready(function(){
         }
     }
 
-    // refreshes the now playing banner and queue
+    /*----------------------------------------------------------------
+    Refresh the things in the queue and now playing banner
+    ----------------------------------------------------------------*/
     function refresh_elements() {
+        // Start the refresh spinner
         $("#loading").addClass("spin")
-        $.get("/now_playing", function(data, status){
-            $("#np").empty();
-            $("#np").append(data);
-            disable_wrap();
-        });
 
-        $.get("/queue", function(data, status){
-            $("#queue_container").empty();
-            $("#queue_container").append(data);
-            $("#queue_title").click(refresh_elements);
-            $("#queue_title").on("tap", refresh_elements);
-            $(".queue_rm").click(remove_song);
-        });
+        // Make the ajax call to get the now playing song
+        $.ajax({
+            url: "/now_playing",
+            type: "GET",
+            dataType: "html",
+            error: function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status == 500) {
+                    $("#alert_area").empty();
+                    $("#alert_area").append(jqXHR.responseText);
+                } else {
+                    alert("Failed to contact server")
+                }
+                $("#loading").removeClass("spin")
+            },
+            success: function(data, textStatus, errorThrown) {
+                $("#np").empty();
+                $("#np").append(data);
+                disable_wrap();
 
+                // Make the ajax call refresh the queue
+                $.ajax({
+                    url: "/queue",
+                    type: "GET",
+                    dataType: "html",
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        if(jqXHR.status == 500) {
+                            $("#alert_area").empty();
+                            $("#alert_area").append(jqXHR.responseText);
+                        } else {
+                            alert("Failed to contact server")
+                        }
+                        $("#loading").removeClass("spin")
+                    },
+                    success: function(data, textStatus, errorThrown) {
+                        $("#queue_container").empty();
+                        $("#queue_container").append(data);
+                        $("#queue_title").click(refresh_elements);
+                        $("#queue_title").on("tap", refresh_elements);
+                        $(".queue_rm").click(remove_song);
+                    },
+                });
+            },
+        });
     };
 
-    // make the ajax call to remove the target song from queue
+    /*----------------------------------------------------------------
+    Remove the target song from queue
+    ----------------------------------------------------------------*/
     function remove_song(event) {
-        $.post("/remove", { 'id' : event.currentTarget.id }, refresh_elements);
+        $.ajax({
+            url: "/remove",
+            type: "POST",
+            data: { 'id' : event.currentTarget.id },
+            error: function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status == 500) {
+                    $("#alert_area").empty();
+                    $("#alert_area").append(jqXHR.responseText);
+                } else {
+                    alert("Failed to contact server");
+                }
+            },
+            success: function(data, textStatus, errorThrown) {
+                refresh_elements();
+            }
+        });
     };
 
+    // Register handler on queue items to remove song
     $(".queue_rm").click(remove_song);
 
-    // click on the queue title to refresh things
+    // Register handler on the queue title to refresh items
     $("#queue_title").click(refresh_elements);
     $("#queue_title").on("tap", refresh_elements);
 
+    // Regiser handler to toggle wrap on now playing banner
     $("#banner").click(toggle_wrap);
     $("#banner").on("tap", toggle_wrap);
 });
