@@ -41,15 +41,28 @@ virtualenv yt_box_env
 source yt_box_env/bin/activate
 ```
 
-+ Install Flask, uWSGI, and youtube_dl:
++ Install the Python dependencies:
 ```
-pip install flask uwsgi youtube_dl
+pip install -r requirements.txt
 ```
 
-#### Configure uWSGI
++ Configure yt_box:
+```bash
+# Make a copy of the sample configuration
+cd config
+cp yt_box_sample.cfg yt_box.cfg
+
+# Generate a key file for Flask's cookie layer. You can use the command below
+# or run your own. The key file must be non-empty.
+tr -cd '[:alnum:]' < /dev/urandom | fold -w30 | head -n1 > yt_box.key
+
+# Make any other configuration you may want
+```
+
+#### Configure uWSGI:
 + Use the included uWSGI configuration
 
-#### Configure nginx
+#### Configure nginx:
 + Use the include nginx configuration
 
 ### Running yt_box
@@ -65,8 +78,13 @@ uwsgi --socket 0.0.0.0:8000 --protocol=http -w wsgi
 ```
 
 + Starting the web services manually:
-```
+```bash
 systemctl start nginx
+
+# Source the environment and from within the yt_box/backend:
+python main.app
+
+# In a new terminal, source the environment, and inside yt_box/frontend:
 uwsgi --ini app.ini
 ```
 
@@ -74,7 +92,8 @@ uwsgi --ini app.ini
 ```
 # Because this is being developed on Arch, which uses systemd:
 systemctl enable nginx
-uwsgi --ini app.ini # There still needs to be a service file written for this part
+
+# There still needs to be a service file written to start the front and backends
 ```
 
 ### Design
