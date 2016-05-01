@@ -311,7 +311,7 @@ class yt_player:
             video = {"name" : self._now_playing.name, "vid_id" : self._now_playing.vid_id,
                       "username" : self._now_playing.username, "user_id" : self._now_playing.user_id}
         else:
-            video = {"name" : "Add Songs to the Queue", "vid_id" : 0, "username" : "None", "user_id" : 0}
+            video = {"name" : "Add Songs to the Queue", "vid_id" : "0", "username" : "None", "user_id" : 0}
         msg = {"cmd" : yt_rpc.CMD_RSP_NOW_PLY, "video" : video }
         self._send_response(sock, msg)
 

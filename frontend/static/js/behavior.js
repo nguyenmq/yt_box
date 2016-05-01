@@ -118,16 +118,38 @@ $(document).ready(function(){
     banner depending on the visible state of the now playing details.
     ----------------------------------------------------------------*/
     function flip_banner_details() {
+        // reveal the rest of the song title
+        $("#banner_detail").on('show.bs.collapse', function(event) {
+            var np_song = $("#np_song");
+            var np_placeholder = $("#np_placeholder");
+
+            if(np_song.width() > np_placeholder.width()) {
+                np_song.slideDown(300, function(){
+                    np_placeholder.hide();
+                });
+            }
+        });
+
         // toggle the chevron orientation
         $("#banner_detail").on('shown.bs.collapse', function(event) {
-            $("#np_song").toggleClass("extend");
             $("#chevron").toggleClass("glyphicon-chevron-down");
             $("#chevron").toggleClass("glyphicon-chevron-up");
         });
 
+        // truncate the song title
+        $("#banner_detail").on('hide.bs.collapse', function(event) {
+            var np_song = $("#np_song");
+            var np_placeholder = $("#np_placeholder");
+
+            if(np_song.width() < np_placeholder.width()) {
+                np_song.slideUp(300, function(){
+                    np_placeholder.show();
+                });
+            }
+        });
+
         // toggle the chevron orientation
         $("#banner_detail").on('hidden.bs.collapse', function(event) {
-            $("#np_song").toggleClass("extend");
             $("#chevron").toggleClass("glyphicon-chevron-up");
             $("#chevron").toggleClass("glyphicon-chevron-down");
         });

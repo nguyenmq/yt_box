@@ -39,9 +39,6 @@ a {
 .jumbotron h2 {
     margin-top: 4pt;
     padding-bottom: 4pt;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
 }
 
 .vid_row {
@@ -85,17 +82,24 @@ a {
     display: inline;
 }
 
-#np_song {
+#np_placeholder {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: height 0.4s ease;
+    transition: height 0.5s ease;
+}
+
+#np_song {
+    white-space: nowrap;
+    overflow: hidden;
+    transition: height 0.5s ease;
+    display: none;
 }
 
 #np_song.extend {
     white-space: normal;
     overflow: hidden;
-    transition: height 0.4s ease;
+    transition: height 0.5s ease;
     text-overflow: initial;
 }
 
