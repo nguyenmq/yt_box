@@ -26,9 +26,8 @@ def index():
         now_playing = ytc.get_now_playing()
         queue = ytc.get_queue()
         return render_template('index.html', name=now_playing.name,
-                    vid_id=now_playing.vid_id, username=now_playing.username,
-                    q_count=len(queue), queue=queue, user=username,
-                    user_id=user_id)
+                    now_playing=now_playing, q_count=len(queue),
+                    queue=queue, user=username, user_id=user_id)
     else:
         return redirect(url_for('login'))
 
@@ -91,7 +90,7 @@ def now_playing():
         if 'user_id' in session:
             now_playing = ytc.get_now_playing()
             response = make_response(render_template('now_playing.html',
-                                        name=now_playing.name, vid_id=now_playing.vid_id,
+                                        now_playing=now_playing, user_id=session['user_id'],
                                         username=now_playing.username ))
             response.status_code = 200
             return response

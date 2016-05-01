@@ -20,8 +20,7 @@ a {
 
 .jumbotron {
     border-radius: 0px !important;
-    padding-top: 10pt;
-    padding-bottom: 2pt;
+    padding: 10px;
     width: 100%;
     background: #519F50;
     /* background: #A54242; unlocks the red theme */
@@ -43,10 +42,6 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
-}
-
-#banner_detail {
-    display: none;
 }
 
 .vid_row {
@@ -90,8 +85,18 @@ a {
     display: inline;
 }
 
-.nowrap {
+#np_song {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: height 0.4s ease;
+}
+
+#np_song.extend {
+    white-space: normal;
+    overflow: hidden;
+    transition: height 0.4s ease;
+    text-overflow: initial;
 }
 
 #queue_container {

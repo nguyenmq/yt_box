@@ -38,30 +38,6 @@ $(document).ready(function(){
     });
 
     /*----------------------------------------------------------------
-    Disables the wrap text on the now playing banner
-    ----------------------------------------------------------------*/
-    function disable_wrap() {
-        $("#np_song").addClass("nowrap");
-        $("#chevron").addClass("glyphicon-chevron-down");
-        $("#chevron").removeClass("glyphicon-chevron-up");
-        $("#banner_detail").hide();
-    }
-
-    /*----------------------------------------------------------------
-    Toggles the wrap text on the now playing banner
-    ----------------------------------------------------------------*/
-    function toggle_wrap() {
-        if($("#np_song").hasClass("nowrap")) {
-            $("#np_song").removeClass("nowrap");
-            $("#chevron").removeClass("glyphicon-chevron-down");
-            $("#chevron").addClass("glyphicon-chevron-up");
-            $("#banner_detail").show();
-        } else {
-            disable_wrap();
-        }
-    }
-
-    /*----------------------------------------------------------------
     Refresh the things in the queue and now playing banner
     ----------------------------------------------------------------*/
     function refresh_elements() {
@@ -83,9 +59,9 @@ $(document).ready(function(){
                 $("#loading").removeClass("spin")
             },
             success: function(data, textStatus, errorThrown) {
-                $("#np").empty();
-                $("#np").append(data);
-                disable_wrap();
+                $("#banner").empty();
+                $("#banner").append(data);
+                //disable_wrap();
 
                 // Make the ajax call refresh the queue
                 $.ajax({
@@ -108,6 +84,7 @@ $(document).ready(function(){
                         $("#queue_title").on("tap", refresh_elements);
                         $(".queue_rm").click(remove_song);
                         flip_collapse_hint();
+                        flip_banner_details();
                     },
                 });
             },
@@ -137,6 +114,26 @@ $(document).ready(function(){
     };
 
     /*----------------------------------------------------------------
+    Registers handlers to flip the up/down chevron on the now playing
+    banner depending on the visible state of the now playing details.
+    ----------------------------------------------------------------*/
+    function flip_banner_details() {
+        // toggle the chevron orientation
+        $("#banner_detail").on('shown.bs.collapse', function(event) {
+            $("#np_song").toggleClass("extend");
+            $("#chevron").toggleClass("glyphicon-chevron-down");
+            $("#chevron").toggleClass("glyphicon-chevron-up");
+        });
+
+        // toggle the chevron orientation
+        $("#banner_detail").on('hidden.bs.collapse', function(event) {
+            $("#np_song").toggleClass("extend");
+            $("#chevron").toggleClass("glyphicon-chevron-up");
+            $("#chevron").toggleClass("glyphicon-chevron-down");
+        });
+    }
+
+    /*----------------------------------------------------------------
     Registers handlers to flip the collapse hint on a song in the
     queue
     ----------------------------------------------------------------*/
@@ -145,16 +142,16 @@ $(document).ready(function(){
         // are shown
         $("[id^=vid_]").on('shown.bs.collapse', function(event) {
             var song_hint = $(this).parent().next().children(".glyphicon-collapse-down")
-            song_hint.removeClass("glyphicon-collapse-down")
-            song_hint.addClass("glyphicon-collapse-up")
+            song_hint.toggleClass("glyphicon-collapse-down")
+            song_hint.toggleClass("glyphicon-collapse-up")
         });
 
         // go from arrow up to down when the songs details
         // are hidden
         $("[id^=vid_]").on('hidden.bs.collapse', function(event) {
             var song_hint = $(this).parent().next().children(".glyphicon-collapse-up")
-            song_hint.removeClass("glyphicon-collapse-up")
-            song_hint.addClass("glyphicon-collapse-down")
+            song_hint.toggleClass("glyphicon-collapse-up")
+            song_hint.toggleClass("glyphicon-collapse-down")
         });
     }
 
@@ -165,9 +162,6 @@ $(document).ready(function(){
     $("#queue_title").click(refresh_elements);
     $("#queue_title").on("tap", refresh_elements);
 
-    // Regiser handler to toggle wrap on now playing banner
-    $("#banner").click(toggle_wrap);
-    $("#banner").on("tap", toggle_wrap);
-
     flip_collapse_hint();
+    flip_banner_details();
 });
