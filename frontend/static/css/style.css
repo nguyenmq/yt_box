@@ -25,6 +25,7 @@ a {
     background: #519F50;
     /* background: #A54242; unlocks the red theme */
     color: white;
+    cursor: pointer;
 }
 
 .glyphicon-plus {

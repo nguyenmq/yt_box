@@ -1,6 +1,6 @@
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Controller class for generating and parsing RPC messages
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 
 import json
 import socket
@@ -9,13 +9,13 @@ import sys
 sys.path.append("..")
 from lib.yt_rpc import yt_rpc, vid_data
 
+
 class yt_controller:
 
     def __init__(self, hostname, port):
         self._bufsz = 4096
         self._hostname = hostname
         self._port = port
-
 
     def _send_data(self, msg):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,7 +38,9 @@ class yt_controller:
         return data
 
     def add_song(self, link, user_id):
-        msg = {"cmd" : yt_rpc.CMD_REQ_ADD_VIDEO, "link" : link, "user_id" : user_id}
+        msg = {"cmd":     yt_rpc.CMD_REQ_ADD_VIDEO,
+               "link":    link,
+               "user_id": user_id}
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
         parsed_json = None
@@ -53,7 +55,15 @@ class yt_controller:
         return parsed_json
 
     def remove_song(self, vid_id, user_id):
-        msg = {"cmd": yt_rpc.CMD_REQ_REM_VIDEO, "vid_id" : vid_id, "user_id" : int(user_id)}
+        """
+        Interface to the CMD_REQ_REM_VIDEO rpc message.
+
+        :param user_id: ID of the user
+        :type user_id: integer
+        """
+        msg = {"cmd":     yt_rpc.CMD_REQ_REM_VIDEO,
+               "vid_id":  vid_id,
+               "user_id": int(user_id)}
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
 
@@ -68,14 +78,47 @@ class yt_controller:
 
         return parsed_json
 
-    def remove_user(self, user_id):
-        msg = {"cmd" : yt_rpc.CMD_REQ_REM_USER, "user_id" : user_id}
+    def logout_user(self, user_id):
+        """
+        Interface to the CMD_REQ_LOGOUT_USER rpc message.
+
+        :param user_id: ID of the user
+        :type user_id: integer
+        """
+        msg = {"cmd": yt_rpc.CMD_REQ_LOGOUT_USER, "user_id": user_id}
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
         sock.close()
 
-    def add_user(self, username):
-        msg = {"cmd" : yt_rpc.CMD_REQ_ADD_USER, "username" : username}
+    def login_user(self, user_id, username):
+        msg = {"cmd":      yt_rpc.CMD_REQ_LOGIN_USER,
+               "user_id":  user_id,
+               "username": username}
+        json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
+        sock = self._send_data(json_msg)
+
+        data = self._recv_data(sock)
+        if len(data) > 0:
+            try:
+                parsed_json = json.loads(data)
+            except json.JSONDecodeError:
+                print("Did not get a valid response")
+
+        return parsed_json
+
+    def update_username(self, user_id, username):
+        """
+        Interface to the CMD_REQ_UPDT_NAME rpc message.
+
+        :param user_id: The id of the user to update name of
+        :type user_id: integer
+
+        :param username: Name of user to add
+        :type username: string
+        """
+        msg = {"cmd":      yt_rpc.CMD_REQ_UPDT_NAME,
+               "user_id":  user_id,
+               "username": username}
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
 
@@ -89,7 +132,7 @@ class yt_controller:
         return parsed_json
 
     def get_now_playing(self):
-        msg = {"cmd" : yt_rpc.CMD_REQ_NOW_PLY}
+        msg = {"cmd": yt_rpc.CMD_REQ_NOW_PLY}
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
 
@@ -99,16 +142,16 @@ class yt_controller:
             try:
                 parsed_json = json.loads(data)
                 now_playing = vid_data(parsed_json['video']['name'],
-                                    parsed_json['video']['vid_id'],
-                                    parsed_json['video']['username'],
-                                    parsed_json['video']['user_id'])
+                                       parsed_json['video']['vid_id'],
+                                       parsed_json['video']['username'],
+                                       parsed_json['video']['user_id'])
             except json.JSONDecodeError:
                 print("Did not get a valid response")
 
         return now_playing
 
     def get_queue(self):
-        msg = {"cmd" : yt_rpc.CMD_REQ_QUEUE}
+        msg = {"cmd": yt_rpc.CMD_REQ_QUEUE}
         json_msg = json.JSONEncoder().encode(msg).encode('utf-8')
         sock = self._send_data(json_msg)
 
@@ -119,7 +162,7 @@ class yt_controller:
                 parsed_json = json.loads(data)
                 for vid in parsed_json['videos']:
                     new_video = vid_data(vid['name'], vid['vid_id'],
-                                     vid['username'], vid['user_id'])
+                                         vid['username'], vid['user_id'])
                     new_queue.append(new_video)
             except json.JSONDecodeError:
                 print("Did not get a valid response")

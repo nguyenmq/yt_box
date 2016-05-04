@@ -1,19 +1,25 @@
+import datetime
+
+
 class yt_rpc:
+
     """
     Defines constants used for parsing the RPC messages.
     """
 
-    CMD_REQ_ADD_VIDEO   = "CMD_REQ_ADD_VIDEO"
-    CMD_REQ_REM_VIDEO   = "CMD_REQ_REM_VIDEO"
-    CMD_REQ_QUEUE       = "CMD_REQ_QUEUE"
-    CMD_REQ_NOW_PLY     = "CMD_REQ_NOW_PLY"
-    CMD_REQ_ADD_USER    = "CMD_REQ_ADD_USER"
-    CMD_REQ_REM_USER    = "CMD_REQ_REM_USER"
-    CMD_RSP_ADD_VIDEO   = "CMD_RSP_ADD_VIDEO"
-    CMD_RSP_REM_VIDEO   = "CMD_RSP_REM_VIDEO"
-    CMD_RSP_QUEUE       = "CMD_RSP_QUEUE"
-    CMD_RSP_NOW_PLY     = "CMD_RSP_NOW_PLY"
-    CMD_RSP_ADD_USER    = "CMD_RSP_ADD_USER"
+    CMD_REQ_ADD_VIDEO = "CMD_REQ_ADD_VIDEO"
+    CMD_REQ_REM_VIDEO = "CMD_REQ_REM_VIDEO"
+    CMD_REQ_QUEUE = "CMD_REQ_QUEUE"
+    CMD_REQ_NOW_PLY = "CMD_REQ_NOW_PLY"
+    CMD_REQ_LOGIN_USER = "CMD_REQ_LOGIN_USER"
+    CMD_REQ_LOGOUT_USER = "CMD_REQ_LOGOUT_USER"
+    CMD_REQ_UPDT_NAME = "CMD_REQ_UPDT_NAME"
+
+    CMD_RSP_ADD_VIDEO = "CMD_RSP_ADD_VIDEO"
+    CMD_RSP_REM_VIDEO = "CMD_RSP_REM_VIDEO"
+    CMD_RSP_QUEUE = "CMD_RSP_QUEUE"
+    CMD_RSP_NOW_PLY = "CMD_RSP_NOW_PLY"
+    CMD_RSP_LOGIN_USER = "CMD_RSP_LOGIN_USER"
 
     # alert types
     ALRT_SUCCESS = "success"
@@ -34,7 +40,9 @@ class yt_rpc:
         """
         return (alert['type'], alert['emph'], alert['msg'])
 
+
 class vid_data:
+
     """
     Represents the data for one video in the video queue
     """
@@ -57,3 +65,30 @@ class vid_data:
         self.username = username
         self.user_id = int(user_id)
 
+class UserData:
+
+    """
+    Contains the data for a user
+    """
+
+    def __init__(self, user_id, username, logged_in, last_access):
+        """
+        Initialize the UserData object
+
+        :param user_id: Id of the user
+        :type user_id: integer
+
+        :param username: Name of the user
+        :type username: string
+
+        :param logged_in: Whether user is logged in
+        :type logged_in: boolean
+
+        :param last_access: Date and time user last active
+        :type last_access: string
+        """
+        self.user_id = int(user_id)
+        self.username = username
+        self.logged_in = bool(logged_in)
+        self.last_access = datetime.datetime.strptime(last_access,
+                                                      "%Y-%m-%d %H:%M:%S")
