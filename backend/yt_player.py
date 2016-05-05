@@ -33,7 +33,7 @@ class yt_player:
                     db.executescript("""
                         CREATE TABLE users (
                             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            username TEXT NOT NULL UNIQUE,
+                            username TEXT UNIQUE,
                             logged_in BOOLEAN NOT NULL,
                             last_access DATETIME NOT NULL);
                         CREATE INDEX usr_index ON users (
