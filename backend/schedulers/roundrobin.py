@@ -26,9 +26,9 @@ class RoundRobin(SchedulerBase):
             Implements the less than operator
             """
             lt = False
-            if self.round > other.round:
+            if self.round < other.round:
                 lt = True
-            elif self.round == other.round and self.time > other.time:
+            elif self.round == other.round and self.time < other.time:
                 lt = True
 
             return lt
@@ -44,9 +44,10 @@ class RoundRobin(SchedulerBase):
         """
         Initializes the RoundRobin class
         """
-        self._videos = []
         self._round = 0
         self._next_round = {}
+        self._videos = []
+        heapq.heapify(self._videos)
 
     def add_video(self, video):
         """
@@ -55,7 +56,7 @@ class RoundRobin(SchedulerBase):
         :param video: Video to insert into queue
         :type video: vid_data
         """
-        next_round = self._next_round.get(video.username, 0)
+        next_round = self._next_round.get(video.user_id, 0)
 
         # if they're new or haven't submitted in a while, give them priority
         if next_round < self._round:
@@ -63,7 +64,7 @@ class RoundRobin(SchedulerBase):
 
         rr_vid = self._RRVidData(video, next_round)
         heapq.heappush(self._videos, rr_vid)
-        self._next_round[video.username] = next_round + 1
+        self._next_round[video.user_id] = next_round + 1
 
     def remove_video(self, id, username):
         """
@@ -121,7 +122,7 @@ class RoundRobin(SchedulerBase):
         ordered_list = list(self._videos)
         ordered_list.sort()
         vid_data = list(map(lambda video: video.vid_data, ordered_list))
-        vid_data.reverse()
+        #vid_data.reverse()
         return vid_data
 
     def get_next_video(self):
