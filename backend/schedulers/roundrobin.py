@@ -1,4 +1,3 @@
-import heapq
 import time
 from schedulers.scheduler_base import SchedulerBase
 
@@ -39,7 +38,6 @@ class RoundRobin(SchedulerBase):
             """
             self.round = self.round - 1
 
-
     def __init__(self):
         """
         Initializes the RoundRobin class
@@ -47,7 +45,6 @@ class RoundRobin(SchedulerBase):
         self._round = 0
         self._next_round = {}
         self._videos = []
-        heapq.heapify(self._videos)
 
     def add_video(self, video):
         """
@@ -63,18 +60,19 @@ class RoundRobin(SchedulerBase):
             next_round = self._round
 
         rr_vid = self._RRVidData(video, next_round)
-        heapq.heappush(self._videos, rr_vid)
+        self._videos.append(rr_vid)
+        self._videos.sort()
         self._next_round[video.user_id] = next_round + 1
 
-    def remove_video(self, id, username):
+    def remove_video(self, vid_id, user_id):
         """
         Remove the given video from the queue.
 
         :param id: ID of the video to remove
         :type id: string
 
-        :param username: Name of user who submitted the video
-        :type id: string
+        :param user_id: ID of user who submitted the video
+        :type id: integer
 
         :return: True if video was found and removed; False otherwise
         :type: boolean
@@ -84,16 +82,16 @@ class RoundRobin(SchedulerBase):
         rm_round = 0
 
         for idx, rr_vid in enumerate(self._videos):
-            if username == rr_vid.vid_data.username:
-                if rr_vid.vid_data.id == id:
-                    # Reduce the user's round number by one in order to keep the
-                    # user's place in line
+            if user_id == rr_vid.vid_data.user_id:
+                if rr_vid.vid_data.vid_id == vid_id:
+                    # Reduce the user's round number by one in order to keep
+                    # the user's place in line
                     next_round = self._next_round.get(rr_vid.vid_data.username, 1)
                     self._next_round[rr_vid.vid_data.username] = next_round - 1
                     rem_vid = self._videos.pop(idx)
                     rm_round = rem_vid.round
                 else:
-                    # Keep track of the user's submittions so that they can be
+                    # Keep track of the user's submissions so that they can be
                     # shifted one round forward
                     user_vids.append(rr_vid)
 
@@ -108,7 +106,7 @@ class RoundRobin(SchedulerBase):
                 if rr_vid.round > rm_round:
                     rr_vid.shift_foward()
 
-            heapq.heapify(self._videos)
+            self._videos.sort()
             return True
 
     def get_playlist(self):
@@ -118,12 +116,11 @@ class RoundRobin(SchedulerBase):
         :return: Ordered list of videos in the queue
         :type: [vid_data]
         """
-        # TODO - traverse the actual tree
-        ordered_list = list(self._videos)
-        ordered_list.sort()
-        vid_data = list(map(lambda video: video.vid_data, ordered_list))
-        #vid_data.reverse()
-        return vid_data
+        playlist = []
+        for video in self._videos:
+            playlist.append(video.vid_data)
+
+        return playlist
 
     def get_next_video(self):
         """
@@ -135,7 +132,7 @@ class RoundRobin(SchedulerBase):
         vid_data = None
 
         if len(self._videos) > 0:
-            video = heapq.heappop(self._videos)
+            video = self._videos.pop(0)
             self._round = video.round
             vid_data = video.vid_data
 

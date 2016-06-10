@@ -66,20 +66,20 @@ a {
     font-size: 13pt;
 }
 
-.queue_header {
+#queue_header {
     display: inline;
     margin-bottom: 0px;
 }
 
-.queue_header h2{
+#queue_header h2{
     display: inline;
 }
 
-.queue_header ul {
+#queue_header ul {
     padding-left: 0px;
 }
 
-.queue_header ul li {
+#queue_header ul li {
     display: inline;
 }
 
@@ -172,7 +172,8 @@ a {
 #banner_logo {
     /* display: inline; */
     margin-bottom: 6pt;
-    max-height: 16pt;
+    max-height: 20px;
+    max-width: 39px;
 }
 
 #user_opt {
@@ -212,4 +213,5 @@ a {
 #logo {
     margin-bottom: 15px;
     max-height: 90px;
+    max-width: 176px;
 }

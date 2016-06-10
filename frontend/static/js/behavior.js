@@ -80,8 +80,8 @@ $(document).ready(function(){
                     success: function(data, textStatus, errorThrown) {
                         $("#queue_container").empty();
                         $("#queue_container").append(data);
-                        $("#queue_title").click(refresh_elements);
-                        $("#queue_title").on("tap", refresh_elements);
+                        $("#queue_header").click(refresh_elements);
+                        $("#queue_header").on("tap", refresh_elements);
                         $(".queue_rm").click(remove_song);
                         flip_collapse_hint();
                         flip_banner_details();
@@ -181,8 +181,8 @@ $(document).ready(function(){
     $(".queue_rm").click(remove_song);
 
     // Register handler on the queue title to refresh items
-    $("#queue_title").click(refresh_elements);
-    $("#queue_title").on("tap", refresh_elements);
+    $("#queue_header").click(refresh_elements);
+    $("#queue_header").on("tap", refresh_elements);
 
     flip_collapse_hint();
     flip_banner_details();
